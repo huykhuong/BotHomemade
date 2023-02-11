@@ -17,7 +17,7 @@ export interface Song {
   duration: string;
 }
 
-export type AvailableCommands = "join" | "play";
+export type AvailableCommands = "join" | "play" | "skip";
 
 // Music State
 export interface BotHomemadeMusicState {
@@ -35,7 +35,7 @@ export interface MusicCommand extends AbstractCommand<"music"> {
   run: (
     message: Message,
     botHomemadeMusicState: BotHomemadeMusicState,
-    client?: Client
+    client: Client
   ) => Promise<void>;
 }
 
