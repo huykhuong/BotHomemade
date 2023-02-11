@@ -14,7 +14,18 @@ export const skipCommand: MusicCommand = {
     // Extracting fields from state manager
     const { audioPlayer, songsQueue } = botHomemadeMusicState;
 
-    if (songsQueue.length === 1) {
+    if (songsQueue.length === 0) {
+      message.channel.send({
+        embeds: [
+          {
+            title: "Song queue",
+            description: "The queue is currently empty",
+            color: colors.embedColor,
+          },
+        ],
+      });
+      return;
+    } else if (songsQueue.length === 1) {
       message.channel.send({
         embeds: [
           {
@@ -25,6 +36,7 @@ export const skipCommand: MusicCommand = {
           },
         ],
       });
+      return;
     } else {
       audioPlayer.stop();
       songsQueue.shift();
