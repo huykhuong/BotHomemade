@@ -1,6 +1,7 @@
-import { joinCommand } from "../commands/join";
-import { playCommand } from "../commands/play";
-import { AvailableCommands, Command } from "../types";
+import { joinCommand } from "../../commands/join";
+import { playCommand } from "../../commands/play";
+import { skipCommand } from "../../commands/skip";
+import { AvailableCommands, Command } from "../../types";
 
 // Get The Command Name
 export const extractCommandNameFromText = (
@@ -26,6 +27,9 @@ export const getCommand = (commandName: AvailableCommands): Command | null => {
       break;
     case "play":
       command = playCommand;
+      break;
+    case "skip":
+      command = skipCommand;
       break;
     default:
       break;

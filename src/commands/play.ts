@@ -1,8 +1,4 @@
-import {
-  AudioPlayerStatus,
-  AudioResource,
-  createAudioResource,
-} from "@discordjs/voice";
+import { AudioPlayerStatus } from "@discordjs/voice";
 import { APIEmbed, Message } from "discord.js";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
@@ -12,7 +8,9 @@ import { checkInVoiceChannel } from "./utils";
 
 import { BotHomemadeMusicState, MusicCommand, Song } from "../types";
 import { getQuery } from "../utilities/commands";
+import { generateAudioStream } from "../utilities/commands/musicCommands";
 import { getRequesterName } from "../utilities/users";
+import { colors } from "../variables";
 
 export const playCommand: MusicCommand = {
   type: "music",
@@ -64,7 +62,7 @@ export const playCommand: MusicCommand = {
                 },
               ],
               image: { url: song.thumbnail },
-              color: 15277667,
+              color: colors.embedColor,
             },
           ],
         });
@@ -105,7 +103,7 @@ export const playCommand: MusicCommand = {
               {
                 title: "Songs queue",
                 description: "No more song left in the queue",
-                color: 15277667,
+                color: colors.embedColor,
               },
             ],
           });
@@ -116,30 +114,13 @@ export const playCommand: MusicCommand = {
         embeds: [
           {
             title: "No song was found!",
-            color: 15277667,
+            color: colors.embedColor,
           },
         ],
       });
     }
   },
 };
-
-function generateAudioStream(link: string): AudioResource {
-  const track = ytdl(link || "", {
-    filter: "audioonly",
-    highWaterMark: 1 << 25,
-  });
-
-  if (!track) {
-    console.log("vcl");
-  }
-
-  const resource = createAudioResource(track, {
-    inlineVolume: true,
-  });
-
-  return resource;
-}
 
 function playingSongEmbedBuilder(song: Song, requester: string): APIEmbed[] {
   return [
@@ -149,7 +130,7 @@ function playingSongEmbedBuilder(song: Song, requester: string): APIEmbed[] {
       url: song.url,
       fields: [{ name: `Requester: ${requester}`, value: "" }],
       image: { url: song.thumbnail },
-      color: 15277667,
+      color: colors.embedColor,
     },
   ];
 }
