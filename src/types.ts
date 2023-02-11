@@ -17,7 +17,7 @@ export interface Song {
   duration: string;
 }
 
-export type AvailableCommands = "join" | "play" | "skip";
+export type AvailableCommands = "join" | "play" | "skip" | "queue";
 
 // Music State
 export interface BotHomemadeMusicState {
