@@ -1,18 +1,16 @@
 import { Message } from "discord.js";
 
 import { BotHomemadeMusicState, MusicCommand } from "../types";
-import { generateAudioStream } from "../utilities/commands/musicCommands";
 import { colors } from "../variables";
 
-export const skipCommand: MusicCommand = {
+export const queueCommand: MusicCommand = {
   type: "music",
-  name: "skip",
+  name: "queue",
   run: async (
     message: Message,
     botHomemadeMusicState: BotHomemadeMusicState
   ) => {
-    // Extracting fields from state manager
-    const { audioPlayer, songsQueue } = botHomemadeMusicState;
+    const { songsQueue } = botHomemadeMusicState;
 
     if (songsQueue.length === 0) {
       message.channel.send({
@@ -24,24 +22,27 @@ export const skipCommand: MusicCommand = {
           },
         ],
       });
-      return;
-    } else if (songsQueue.length === 1) {
+    } else {
       message.channel.send({
         embeds: [
           {
             title: "Song queue",
-            description:
-              "There is no more song left in the queue to be skipped to",
+            fields: songsQueue.map((song, index) => {
+              // Playing song
+              if (index === 0) {
+                return {
+                  name: `${index + 1}: ${song.title} - Playing`,
+                  value: "",
+                };
+                // Other songs
+              } else {
+                return { name: `${index + 1}: ${song.title}`, value: "" };
+              }
+            }),
             color: colors.embedColor,
           },
         ],
       });
-      return;
-    } else {
-      audioPlayer.stop();
-      songsQueue.shift();
-
-      audioPlayer.play(generateAudioStream(songsQueue[0].url));
     }
   },
 };

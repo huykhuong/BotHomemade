@@ -43,7 +43,6 @@ client.on("ready", () => {
 });
 
 // Message Listener Area
-
 let commandName: AvailableCommands | null = null;
 
 client.on("messageCreate", async (message) => {

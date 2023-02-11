@@ -17,7 +17,8 @@ export const checkInVoiceChannel = (
 ) => {
   const voiceChannel = message.member?.voice.channel;
   if (!voiceChannel) {
-    return message.channel.send(sendRandomCommandResponse(responseSamples));
+    message.channel.send(sendRandomCommandResponse(responseSamples));
+    return;
   }
 
   if (!voiceConnection) {
