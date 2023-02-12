@@ -75,15 +75,17 @@ client.on("messageCreate", async (message) => {
 
 // Task to run when Bot is disconnected
 client.on("voiceStateUpdate", (oldState, newState) => {
+  // If user or bot leaves a voice channel
   if (oldState.channelId && !newState.channelId) {
+    if (!newState) return;
+
     // Bot was disconnected
-    if (newState) {
-      if ((newState.id as string) === client.user?.id) {
-        BotHomemadeMusicStateManager.songsQueue = [];
-        BotHomemadeMusicStateManager.voiceConnection?.destroy();
-        BotHomemadeMusicStateManager.audioPlayer.stop();
-        return;
-      }
+    if ((newState.id as string) === client.user?.id) {
+      BotHomemadeMusicStateManager.songsQueue = [];
+      BotHomemadeMusicStateManager.voiceConnection?.destroy();
+      BotHomemadeMusicStateManager.audioPlayer.removeAllListeners();
+      BotHomemadeMusicStateManager.audioPlayer.stop();
+      return;
     }
   }
 });
