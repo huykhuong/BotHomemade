@@ -10,24 +10,35 @@ export const sendRandomCommandResponse = (respArr: string[]): string => {
 };
 
 export const checkInVoiceChannel = (
-  player: AudioPlayer,
   message: Message,
-  responseSamples: string[],
-  voiceConnection: VoiceConnection | null
-) => {
+  responseSamples: string[]
+): boolean => {
   const voiceChannel = message.member?.voice.channel;
+
   if (!voiceChannel) {
     message.channel.send(sendRandomCommandResponse(responseSamples));
-    return;
+    return false;
   }
+
+  return true;
+};
+
+export const createVoiceConnection = (
+  audioPlayer: AudioPlayer,
+  voiceConnection: VoiceConnection | null,
+  message: Message
+): void => {
+  const voiceChannel = message.member?.voice.channel;
+
+  if (!voiceChannel) return;
 
   if (!voiceConnection) {
     voiceConnection = joinVoiceChannel({
       channelId: voiceChannel.id,
-      guildId: voiceChannel.guildId || "",
+      guildId: voiceChannel.guildId,
       adapterCreator: voiceChannel.guild.voiceAdapterCreator,
     });
 
-    voiceConnection.subscribe(player);
+    voiceConnection.subscribe(audioPlayer);
   }
 };
