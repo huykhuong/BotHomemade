@@ -73,5 +73,20 @@ client.on("messageCreate", async (message) => {
   }
 });
 
+// Task to run when Bot is disconnected
+client.on("voiceStateUpdate", (oldState, newState) => {
+  if (oldState.channelId && !newState.channelId) {
+    // Bot was disconnected
+    if (newState) {
+      if ((newState.id as string) === client.user?.id) {
+        BotHomemadeMusicStateManager.songsQueue = [];
+        BotHomemadeMusicStateManager.voiceConnection?.destroy();
+        BotHomemadeMusicStateManager.audioPlayer.stop();
+        return;
+      }
+    }
+  }
+});
+
 // DO LOGIN
 client.login(process.env.CLIENT_TOKEN);
