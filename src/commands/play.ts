@@ -1,12 +1,12 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { APIEmbed, Message } from "discord.js";
+import { APIEmbed } from "discord.js";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel, createVoiceConnection } from "./utils";
 
-import { BotHomemadeMusicState, MusicCommand, Song } from "../types";
+import { MusicCommand, Song } from "../types";
 import { getQuery } from "../utilities/commands";
 import { generateAudioStream } from "../utilities/commands/musicCommands";
 import { getRequesterName } from "../utilities/users";
@@ -15,22 +15,19 @@ import { colors } from "../variables";
 export const playCommand: MusicCommand = {
   type: "music",
   name: "play",
-  run: async (
-    message: Message,
-    botHomemadeMusicState: BotHomemadeMusicState
-  ) => {
+  run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
     // Extracting fields from state manager
-    const {
-      audioPlayer: player,
-      songsQueue: queue,
-      voiceConnection,
-    } = botHomemadeMusicState;
+    const { songsQueue: queue } = botHomemadeMusicState;
+    const { audioPlayer } = BotHomemadeGeneralState;
 
-    if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
+    if (!BotHomemadeGeneralState) return;
+
+    const { voiceConnection } = BotHomemadeGeneralState;
+
+    if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed))
       return;
-    }
 
-    createVoiceConnection(player, voiceConnection, message);
+    createVoiceConnection(audioPlayer, voiceConnection, message);
 
     const searchResults = await ytsr(getQuery(message.content), { limit: 1 });
     const resultInfo = searchResults.items[0] as Video;
@@ -76,13 +73,13 @@ export const playCommand: MusicCommand = {
           ),
         });
 
-        player.play(generateAudioStream(resultInfo.url));
+        audioPlayer.play(generateAudioStream(resultInfo.url));
       }
 
       // Must clear all listeners for every play command call
-      player.removeAllListeners();
+      audioPlayer.removeAllListeners();
 
-      player.on(AudioPlayerStatus.Idle, () => {
+      audioPlayer.on(AudioPlayerStatus.Idle, () => {
         queue.shift();
 
         if (queue.length !== 0) {
@@ -93,11 +90,10 @@ export const playCommand: MusicCommand = {
             ),
           });
 
-          player.play(generateAudioStream(resultInfo.url));
+          audioPlayer.play(generateAudioStream(resultInfo.url));
         }
 
         if (queue.length === 0) {
-          console.log("yo");
           message.channel.send({
             embeds: [
               {
@@ -108,7 +104,7 @@ export const playCommand: MusicCommand = {
             ],
           });
 
-          player.removeAllListeners();
+          audioPlayer.removeAllListeners();
         }
       });
     } else {
