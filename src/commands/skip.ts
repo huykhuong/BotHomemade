@@ -1,10 +1,9 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { Message } from "discord.js";
 
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel } from "./utils";
 
-import { BotHomemadeMusicState, MusicCommand } from "../types";
+import { MusicCommand } from "../types";
 import { generateAudioStream } from "../utilities/commands/musicCommands";
 import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
@@ -12,12 +11,10 @@ import { colors } from "../variables";
 export const skipCommand: MusicCommand = {
   type: "music",
   name: "skip",
-  run: async (
-    message: Message,
-    botHomemadeMusicState: BotHomemadeMusicState
-  ) => {
+  run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
     // Extracting fields from state manager
-    const { audioPlayer, songsQueue } = botHomemadeMusicState;
+    const { songsQueue } = botHomemadeMusicState;
+    const { audioPlayer } = BotHomemadeGeneralState;
 
     if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
       return;
