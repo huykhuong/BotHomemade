@@ -1,5 +1,5 @@
 import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
-import { Client, Message } from "discord.js";
+import { Message } from "discord.js";
 
 type CommandTypes = "general" | "music";
 
@@ -7,6 +7,14 @@ type AbstractCommand<T extends CommandTypes> = {
   type: T;
   name: string;
 };
+
+// Bot State Manager
+export interface BotHomemade {
+  guildId: string | null;
+  channelId: string | null;
+  voiceConnection: VoiceConnection | null;
+  audioPlayer: AudioPlayer;
+}
 
 // Song interface
 export interface Song {
@@ -22,20 +30,21 @@ export type AvailableCommands = "join" | "play" | "skip" | "queue";
 // Music State
 export interface BotHomemadeMusicState {
   songsQueue: Song[];
-  audioPlayer: AudioPlayer;
-  voiceConnection: VoiceConnection | null;
 }
 
 // Command Types
 export interface GeneralCommand extends AbstractCommand<"general"> {
-  run: (message: Message) => Promise<void>;
+  run: (
+    message: Message,
+    BotHomemadeGeneralState: BotHomemade
+  ) => Promise<void>;
 }
 
 export interface MusicCommand extends AbstractCommand<"music"> {
   run: (
     message: Message,
     botHomemadeMusicState: BotHomemadeMusicState,
-    client: Client
+    BotHomemadeGeneralState: BotHomemade
   ) => Promise<void>;
 }
 
