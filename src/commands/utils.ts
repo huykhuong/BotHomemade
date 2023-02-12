@@ -5,6 +5,9 @@ import {
 } from "@discordjs/voice";
 import { Message } from "discord.js";
 
+import { BotHomemadeGeneralState } from "../StateManager";
+import { BotHomemade } from "../types";
+
 export const sendRandomCommandResponse = (respArr: string[]): string => {
   return respArr[Math.floor(Math.random() * respArr.length)];
 };
@@ -28,17 +31,36 @@ export const createVoiceConnection = (
   voiceConnection: VoiceConnection | null,
   message: Message
 ): void => {
-  const voiceChannel = message.member?.voice.channel;
+  if (message.member?.voice.channel) {
+    if (
+      !voiceConnection ||
+      message.member.voice.channel.id !== BotHomemadeGeneralState.channelId
+    ) {
+      const newVoiceConnection = joinVoiceChannel({
+        channelId: message.member?.voice.channel.id,
+        guildId: message.member?.voice.channel.guildId,
+        adapterCreator: message.member?.voice.channel.guild.voiceAdapterCreator,
+      });
 
-  if (!voiceChannel) return;
+      setStateBotHomemade(
+        BotHomemadeGeneralState,
+        message.member.voice.channel.id,
+        message.guild?.id || "",
+        newVoiceConnection
+      );
 
-  if (!voiceConnection) {
-    voiceConnection = joinVoiceChannel({
-      channelId: voiceChannel.id,
-      guildId: voiceChannel.guildId,
-      adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-    });
-
-    voiceConnection.subscribe(audioPlayer);
+      newVoiceConnection.subscribe(audioPlayer);
+    }
   }
 };
+
+function setStateBotHomemade(
+  state: BotHomemade,
+  channelId: string,
+  guildId: string,
+  voiceConnection: VoiceConnection
+): void {
+  state.channelId = channelId;
+  state.guildId = guildId;
+  state.voiceConnection = voiceConnection;
+}
