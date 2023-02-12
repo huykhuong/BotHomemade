@@ -1,5 +1,10 @@
+name: JavaScript/TypeScript
+concurrency:
+  cancel-in-progress: true
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -7,12 +12,8 @@ jobs:
     name: eslint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: install node v12
-        uses: actions/setup-node@v1
-        with:
-          node-version: 19
-      - name: npm install
+      - uses: actions/checkout@v3
+      - name: Install modules
         run: npm install
       - name: eslint
-        uses: icrawl/action-eslint@v1
+        uses: npm run lint
