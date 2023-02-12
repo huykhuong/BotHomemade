@@ -4,7 +4,7 @@ import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
 import responseSamples from "./randomResponseCollection.json";
-import { checkInVoiceChannel } from "./utils";
+import { checkInVoiceChannel, createVoiceConnection } from "./utils";
 
 import { BotHomemadeMusicState, MusicCommand, Song } from "../types";
 import { getQuery } from "../utilities/commands";
@@ -26,12 +26,11 @@ export const playCommand: MusicCommand = {
       voiceConnection,
     } = botHomemadeMusicState;
 
-    checkInVoiceChannel(
-      player,
-      message,
-      responseSamples.joinCommand.failed,
-      voiceConnection
-    );
+    if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
+      return;
+    }
+
+    createVoiceConnection(player, voiceConnection, message);
 
     const searchResults = await ytsr(getQuery(message.content), { limit: 1 });
     const resultInfo = searchResults.items[0] as Video;
@@ -98,6 +97,7 @@ export const playCommand: MusicCommand = {
         }
 
         if (queue.length === 0) {
+          console.log("yo");
           message.channel.send({
             embeds: [
               {
@@ -107,6 +107,8 @@ export const playCommand: MusicCommand = {
               },
             ],
           });
+
+          player.removeAllListeners();
         }
       });
     } else {

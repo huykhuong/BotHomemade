@@ -1,7 +1,12 @@
+import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
+
+import responseSamples from "./randomResponseCollection.json";
+import { checkInVoiceChannel } from "./utils";
 
 import { BotHomemadeMusicState, MusicCommand } from "../types";
 import { generateAudioStream } from "../utilities/commands/musicCommands";
+import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
 
 export const skipCommand: MusicCommand = {
@@ -13,6 +18,10 @@ export const skipCommand: MusicCommand = {
   ) => {
     // Extracting fields from state manager
     const { audioPlayer, songsQueue } = botHomemadeMusicState;
+
+    if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
+      return;
+    }
 
     if (songsQueue.length === 0) {
       message.channel.send({
@@ -39,9 +48,52 @@ export const skipCommand: MusicCommand = {
       return;
     } else {
       audioPlayer.stop();
-      songsQueue.shift();
 
-      audioPlayer.play(generateAudioStream(songsQueue[0].url));
+      // Must clear all listeners for every skip command call
+      audioPlayer.removeAllListeners();
+
+      audioPlayer.on(AudioPlayerStatus.Idle, () => {
+        songsQueue.shift();
+
+        if (songsQueue.length !== 0) {
+          message.channel.send({
+            embeds: [
+              {
+                title: `Playing ${songsQueue[0].title}`,
+                description: `Author: ${songsQueue[0].author} | Duration: ${songsQueue[0].duration}`,
+                url: songsQueue[0].url,
+                fields: [
+                  {
+                    name: `Requester: ${getRequesterName(
+                      message.author.username
+                    )}`,
+                    value: "",
+                  },
+                ],
+                image: { url: songsQueue[0].thumbnail },
+                color: colors.embedColor,
+              },
+            ],
+          });
+
+          audioPlayer.play(generateAudioStream(songsQueue[0].url));
+        }
+
+        // This check is used for announcing no song left in the queue, when playing music using Idle event listener
+        if (songsQueue.length === 0) {
+          message.channel.send({
+            embeds: [
+              {
+                title: "Songs queue",
+                description: "No more song left in the queue",
+                color: colors.embedColor,
+              },
+            ],
+          });
+
+          audioPlayer.removeAllListeners();
+        }
+      });
     }
   },
 };
