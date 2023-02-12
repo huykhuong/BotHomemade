@@ -12,6 +12,8 @@ export const BotHomemadeGeneralState: BotHomemade = {
 export const clearGeneralState = () => {
   BotHomemadeGeneralState.voiceConnection?.destroy();
   BotHomemadeGeneralState.channelId = null;
+  BotHomemadeGeneralState.audioPlayer.stop();
+  BotHomemadeGeneralState.audioPlayer.removeAllListeners();
 };
 
 export const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
@@ -20,5 +22,4 @@ export const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
 
 export const clearAudioState = () => {
   BotHomemadeMusicStateManager.songsQueue = [];
-  BotHomemadeGeneralState.audioPlayer.stop();
 };

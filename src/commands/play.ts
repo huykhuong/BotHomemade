@@ -94,7 +94,6 @@ export const playCommand: MusicCommand = {
         }
 
         if (queue.length === 0) {
-          console.log("yo");
           message.channel.send({
             embeds: [
               {
