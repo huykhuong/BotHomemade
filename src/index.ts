@@ -1,10 +1,14 @@
-//IMPORT modules needed for Discord Bot Base
-import { createAudioPlayer } from "@discordjs/voice";
 import { Client, GatewayIntentBits, Partials, ActivityType } from "discord.js";
 import dotenv from "dotenv";
 
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+  clearAudioState,
+  clearGeneralState,
+} from "./StateManager";
 dotenv.config();
-import { AvailableCommands, BotHomemadeMusicState } from "./types";
+import { AvailableCommands } from "./types";
 import { extractCommandNameFromText, getCommand } from "./utilities/commands";
 import { commandAliases } from "./variables";
 
@@ -13,6 +17,7 @@ const CONFIG = {
   prefix: ".",
 };
 
+// Initializing BotHommade client
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -24,13 +29,6 @@ const client = new Client({
   ],
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
-
-// Constructing BotHomemade instance
-const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
-  songsQueue: [],
-  audioPlayer: createAudioPlayer(),
-  voiceConnection: null,
-};
 
 client.on("ready", () => {
   if (!client.user) return;
@@ -63,10 +61,15 @@ client.on("messageCreate", async (message) => {
   if (command) {
     switch (command.type) {
       case "general":
-        command.run(message);
+        command.run(message, BotHomemadeGeneralState);
         break;
       case "music":
-        command.run(message, BotHomemadeMusicStateManager, client);
+        command.run(
+          message,
+          BotHomemadeMusicStateManager,
+          BotHomemadeGeneralState
+        );
+        break;
     }
   } else {
     await message.channel.send("Dunno whatcha saying bro!");
@@ -80,12 +83,12 @@ client.on("voiceStateUpdate", (oldState, newState) => {
     if (!newState) return;
 
     // Bot was disconnected
-    if ((newState.id as string) === client.user?.id) {
-      BotHomemadeMusicStateManager.songsQueue = [];
-      BotHomemadeMusicStateManager.voiceConnection?.destroy();
-      BotHomemadeMusicStateManager.audioPlayer.removeAllListeners();
-      BotHomemadeMusicStateManager.audioPlayer.stop();
-      return;
+    if (newState) {
+      if ((newState.id as string) === client.user?.id) {
+        clearGeneralState();
+        clearAudioState();
+        return;
+      }
     }
   }
 });
