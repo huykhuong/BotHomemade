@@ -1,6 +1,8 @@
 import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
 
+export type AvailableCommands = "join" | "play" | "skip" | "queue" | "remove";
+
 type CommandTypes = "general" | "music";
 
 type AbstractCommand<T extends CommandTypes> = {
@@ -24,8 +26,6 @@ export interface Song {
   thumbnail: string;
   duration: string;
 }
-
-export type AvailableCommands = "join" | "play" | "skip" | "queue";
 
 // Music State
 export interface BotHomemadeMusicState {
