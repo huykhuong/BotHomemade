@@ -9,6 +9,7 @@ export const BotHomemadeGeneralState: BotHomemade = {
   audioPlayer: createAudioPlayer(),
 };
 
+// Clear General State
 export const clearGeneralState = () => {
   BotHomemadeGeneralState.voiceConnection?.destroy();
   BotHomemadeGeneralState.channelId = null;
@@ -20,6 +21,7 @@ export const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
   songsQueue: [],
 };
 
+// Clear General Audio State
 export const clearAudioState = () => {
   BotHomemadeMusicStateManager.songsQueue = [];
 };
