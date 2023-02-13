@@ -44,6 +44,18 @@ export const skipCommand: MusicCommand = {
       });
       return;
     } else {
+      message.channel.send({
+        embeds: [
+          {
+            title: "Song queue",
+            description: `${getRequesterName(message.author.id)} skips to \`${
+              songsQueue[1].title
+            }\``,
+            color: colors.embedColor,
+          },
+        ],
+      });
+
       audioPlayer.stop();
 
       // Must clear all listeners for every skip command call
