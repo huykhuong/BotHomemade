@@ -25,6 +25,7 @@ export interface Song {
   author: string;
   thumbnail: string;
   duration: string;
+  requester: string;
 }
 
 // Music State

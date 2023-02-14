@@ -73,9 +73,7 @@ export const skipCommand: MusicCommand = {
                 url: songsQueue[0].url,
                 fields: [
                   {
-                    name: `Requester: ${getRequesterName(
-                      message.author.username
-                    )}`,
+                    name: `Requester: ${songsQueue[0].requester}`,
                     value: "",
                   },
                 ],

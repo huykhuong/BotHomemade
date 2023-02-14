@@ -56,6 +56,7 @@ export const playCommand: MusicCommand = {
         author: resultInfo.author?.name || "",
         thumbnail: resultInfo.bestThumbnail?.url || "",
         duration: resultInfo.duration || "",
+        requester: getRequesterName(message.author.id),
       };
 
       queue.push(song);
@@ -64,17 +65,9 @@ export const playCommand: MusicCommand = {
         message.channel.send({
           embeds: [
             {
-              title: `${getRequesterName(message.author.id)} added ${
-                resultInfo.title
-              } to the queue`,
+              title: `${song.requester} added ${resultInfo.title} to the queue`,
               description: `Author: ${song.author} | Duration: ${song.duration}`,
               url: song.url,
-              fields: [
-                {
-                  name: `Requester: ${getRequesterName(message.author.id)}`,
-                  value: "",
-                },
-              ],
               image: { url: song.thumbnail },
               color: colors.embedColor,
             },
@@ -85,10 +78,7 @@ export const playCommand: MusicCommand = {
       //Play song immediately if only 1 song in queue
       if (queue.length === 1) {
         message.channel.send({
-          embeds: playingSongEmbedBuilder(
-            queue[0],
-            getRequesterName(message.author.id)
-          ),
+          embeds: playingSongEmbedBuilder(queue[0]),
         });
 
         audioPlayer.play(generateAudioStream(resultInfo.url));
@@ -102,10 +92,7 @@ export const playCommand: MusicCommand = {
 
         if (queue.length !== 0) {
           message.channel.send({
-            embeds: playingSongEmbedBuilder(
-              queue[0],
-              getRequesterName(message.author.id)
-            ),
+            embeds: playingSongEmbedBuilder(queue[0]),
           });
 
           audioPlayer.play(generateAudioStream(resultInfo.url));
@@ -138,13 +125,13 @@ export const playCommand: MusicCommand = {
   },
 };
 
-function playingSongEmbedBuilder(song: Song, requester: string): APIEmbed[] {
+function playingSongEmbedBuilder(song: Song): APIEmbed[] {
   return [
     {
       title: `Playing ${song.title}`,
       description: `Author: ${song.author} | Duration: ${song.duration}`,
       url: song.url,
-      fields: [{ name: `Requester: ${requester}`, value: "" }],
+      fields: [{ name: `Requester: ${song.requester}`, value: "" }],
       image: { url: song.thumbnail },
       color: colors.embedColor,
     },
