@@ -1,6 +1,7 @@
 import { joinCommand } from "../../commands/join";
 import { playCommand } from "../../commands/play";
 import { queueCommand } from "../../commands/queue";
+import { removeCommand } from "../../commands/remove";
 import { skipCommand } from "../../commands/skip";
 import { AvailableCommands, Command } from "../../types";
 
@@ -34,6 +35,9 @@ export const getCommand = (commandName: AvailableCommands): Command | null => {
       break;
     case "queue":
       command = queueCommand;
+      break;
+    case "remove":
+      command = removeCommand;
       break;
     default:
       break;

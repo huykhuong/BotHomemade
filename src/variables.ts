@@ -3,6 +3,8 @@ export const commandAliases = new Map([
   ["come", "join"],
   ["next", "skip"],
   ["q", "queue"],
+  ["r", "remove"],
+  ["rm", "remove"],
 ]);
 
 export const colors = {

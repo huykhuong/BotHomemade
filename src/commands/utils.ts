@@ -26,6 +26,18 @@ export const checkInVoiceChannel = (
   return true;
 };
 
+export const checkIsPlayingMusicOrInVoiceChannel = (
+  message: Message,
+  voiceConnection: VoiceConnection | null
+): boolean => {
+  if (!voiceConnection) {
+    message.channel.send("Tell me to play a song or join a room first!");
+    return false;
+  }
+
+  return true;
+};
+
 export const createVoiceConnection = (
   audioPlayer: AudioPlayer,
   voiceConnection: VoiceConnection | null,

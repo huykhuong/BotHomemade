@@ -6,5 +6,18 @@
       "Bitch please, get in a room first.",
       "Mày vào room chưa?"
     ]
+  },
+  "skipCommand": {
+    "notEnoughSong": ["I need at least 2 songs in the queue"],
+    "notInARoom": [
+      "Get in a voice channel first before telling me to skip a song",
+      "Bruh! Know how to use Discord? Get in a room first",
+      "Mày vào room chưa mà kêu tao skip?"
+    ],
+    "notInSameRoom": [
+      "Cannot make me remove a song cuz I'm singing in another room",
+      "Get in the same room with me first",
+      "Tao đang hát ở phòng khác tự nhiên kêu tao bỏ?"
+    ]
   }
 }

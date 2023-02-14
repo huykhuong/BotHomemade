@@ -30,6 +30,22 @@ export const playCommand: MusicCommand = {
     createVoiceConnection(audioPlayer, voiceConnection, message);
 
     const searchResults = await ytsr(getQuery(message.content), { limit: 1 });
+
+    // Check if cannot find a song from youtube
+    if (!searchResults) {
+      message.channel.send({
+        embeds: [
+          {
+            title: "Play a song",
+            description: "Sorry! I cannot find the requested song.",
+            color: colors.embedColor,
+          },
+        ],
+      });
+
+      return;
+    }
+
     const resultInfo = searchResults.items[0] as Video;
 
     // Check to see if the youtube link has result
@@ -48,7 +64,9 @@ export const playCommand: MusicCommand = {
         message.channel.send({
           embeds: [
             {
-              title: `Added ${resultInfo.title} to the queue`,
+              title: `${getRequesterName(message.author.id)} added ${
+                resultInfo.title
+              } to the queue`,
               description: `Author: ${song.author} | Duration: ${song.duration}`,
               url: song.url,
               fields: [
