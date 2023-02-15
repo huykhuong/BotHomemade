@@ -19,5 +19,13 @@
       "Get in the same room with me first",
       "Tao đang hát ở phòng khác tự nhiên kêu tao bỏ?"
     ]
+  },
+  "pauseCommand": {
+    "notInARoom": [
+      "Get in a voice channel first before telling me to pause a song",
+      "Bruh! Know how to use Discord? Get in a room first",
+      "Mày vào room chưa mà kêu tao pause?"
+    ],
+    "notSinging": ["I'm not singing, pause what?", "Tao không hát sao pause!"]
   }
 }
