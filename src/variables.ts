@@ -6,6 +6,7 @@ export const commandAliases = new Map([
   ["r", "remove"],
   ["rm", "remove"],
   ["pau", "pause"],
+  ["unpau", "unpause"],
 ]);
 
 export const colors = {

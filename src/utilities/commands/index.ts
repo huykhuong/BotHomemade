@@ -4,6 +4,7 @@ import { playCommand } from "../../commands/play";
 import { queueCommand } from "../../commands/queue";
 import { removeCommand } from "../../commands/remove";
 import { skipCommand } from "../../commands/skip";
+import { unpauseCommand } from "../../commands/unpause";
 import { AvailableCommands, Command } from "../../types";
 
 // Get The Command Name
@@ -22,32 +23,24 @@ export const extractCommandNameFromText = (
 
 // Get Command Object
 export const getCommand = (commandName: AvailableCommands): Command | null => {
-  let command: Command | null = null;
-
   switch (commandName) {
     case "join":
-      command = joinCommand;
-      break;
+      return joinCommand;
     case "play":
-      command = playCommand;
-      break;
+      return playCommand;
     case "skip":
-      command = skipCommand;
-      break;
+      return skipCommand;
     case "queue":
-      command = queueCommand;
-      break;
+      return queueCommand;
     case "remove":
-      command = removeCommand;
-      break;
+      return removeCommand;
     case "pause":
-      command = pauseCommand;
-      break;
+      return pauseCommand;
+    case "unpause":
+      return unpauseCommand;
     default:
-      break;
+      return null;
   }
-
-  return command;
 };
 
 // Get Command Query
