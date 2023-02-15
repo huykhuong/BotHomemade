@@ -1,7 +1,13 @@
 import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
 
-export type AvailableCommands = "join" | "play" | "skip" | "queue" | "remove";
+export type AvailableCommands =
+  | "join"
+  | "play"
+  | "skip"
+  | "queue"
+  | "remove"
+  | "pause";
 
 type CommandTypes = "general" | "music";
 
@@ -31,6 +37,7 @@ export interface Song {
 // Music State
 export interface BotHomemadeMusicState {
   songsQueue: Song[];
+  paused: boolean;
 }
 
 // Command Types
