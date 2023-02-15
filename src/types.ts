@@ -7,7 +7,8 @@ export type AvailableCommands =
   | "skip"
   | "queue"
   | "remove"
-  | "pause";
+  | "pause"
+  | "unpause";
 
 type CommandTypes = "general" | "music";
 
