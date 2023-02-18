@@ -20,6 +20,11 @@ export const clearGeneralState = () => {
 export const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
   songsQueue: [],
   paused: false,
+  autoplay: false,
+  spotify: {
+    expireTimestamp: "",
+    accessToken: "",
+  },
 };
 
 // Clear General Audio State

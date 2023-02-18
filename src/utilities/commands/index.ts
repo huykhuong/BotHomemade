@@ -1,3 +1,4 @@
+import autoplayCommand from "../../commands/autoplay";
 import { joinCommand } from "../../commands/join";
 import { pauseCommand } from "../../commands/pause";
 import { playCommand } from "../../commands/play";
@@ -38,6 +39,8 @@ export const getCommand = (commandName: AvailableCommands): Command | null => {
       return pauseCommand;
     case "unpause":
       return unpauseCommand;
+    case "autoplay":
+      return autoplayCommand;
     default:
       return null;
   }
