@@ -8,7 +8,8 @@ export type AvailableCommands =
   | "queue"
   | "remove"
   | "pause"
-  | "unpause";
+  | "unpause"
+  | "autoplay";
 
 type CommandTypes = "general" | "music";
 
@@ -33,12 +34,18 @@ export interface Song {
   thumbnail: string;
   duration: string;
   requester: string;
+  nextURL?: string;
 }
 
 // Music State
 export interface BotHomemadeMusicState {
   songsQueue: Song[];
   paused: boolean;
+  autoplay: boolean;
+  spotify: {
+    expireTimestamp: string;
+    accessToken: string | null;
+  };
 }
 
 // Command Types
