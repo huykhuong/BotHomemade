@@ -1,4 +1,4 @@
-import { AudioPlayerStatus } from "@discordjs/voice";
+import ytdl from "ytdl-core";
 
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel } from "./utils";
@@ -13,94 +13,67 @@ export const skipCommand: MusicCommand = {
   name: "skip",
   run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
     // Extracting fields from state manager
-    const { songsQueue } = botHomemadeMusicState;
+    const { songsQueue, autoplay } = botHomemadeMusicState;
     const { audioPlayer } = BotHomemadeGeneralState;
 
     if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
       return;
     }
 
-    if (songsQueue.length === 0) {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song queue",
-            description: "The queue is currently empty",
-            color: colors.embedColor,
-          },
-        ],
-      });
-      return;
-    } else if (songsQueue.length === 1) {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song queue",
-            description:
-              "There is no more song left in the queue to be skipped to",
-            color: colors.embedColor,
-          },
-        ],
-      });
-      return;
-    } else {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song queue",
-            description: `${getRequesterName(message.author.id)} skips to \`${
-              songsQueue[1].title
-            }\``,
-            color: colors.embedColor,
-          },
-        ],
-      });
+    if (!autoplay) {
+      if (songsQueue.length === 0) {
+        message.channel.send({
+          embeds: [
+            {
+              title: "Song queue",
+              description: "The queue is currently empty",
+              color: colors.embedColor,
+            },
+          ],
+        });
+        return;
+      } else if (songsQueue.length === 1) {
+        message.channel.send({
+          embeds: [
+            {
+              title: "Song queue",
+              description:
+                "There is no more song left in the queue to be skipped to",
+              color: colors.embedColor,
+            },
+          ],
+        });
+        return;
+      } else {
+        message.channel.send({
+          embeds: [
+            {
+              title: "Song queue",
+              description: `${getRequesterName(message.author.id)} skips to \`${
+                songsQueue[1].title
+              }\``,
+              color: colors.embedColor,
+            },
+          ],
+        });
 
-      audioPlayer.stop();
+        audioPlayer.stop();
 
-      // Must clear all listeners for every skip command call
-      audioPlayer.removeAllListeners();
-
-      audioPlayer.on(AudioPlayerStatus.Idle, () => {
         songsQueue.shift();
 
-        if (songsQueue.length !== 0) {
-          message.channel.send({
-            embeds: [
-              {
-                title: `Playing ${songsQueue[0].title}`,
-                description: `Author: ${songsQueue[0].author} | Duration: ${songsQueue[0].duration}`,
-                url: songsQueue[0].url,
-                fields: [
-                  {
-                    name: `Requester: ${songsQueue[0].requester}`,
-                    value: "",
-                  },
-                ],
-                image: { url: songsQueue[0].thumbnail },
-                color: colors.embedColor,
-              },
-            ],
-          });
-
+        if (ytdl.validateURL(songsQueue[0].url))
           audioPlayer.play(generateAudioStream(songsQueue[0].url));
-        }
 
-        // This check is used for announcing no song left in the queue, when playing music using Idle event listener
-        if (songsQueue.length === 0) {
-          message.channel.send({
-            embeds: [
-              {
-                title: "Songs queue",
-                description: "No more song left in the queue",
-                color: colors.embedColor,
-              },
-            ],
-          });
+        // audioPlayer.play(
+        //   (await generateSpotifyAudioStream(
+        //     songsQueue[0].url
+        //   )) as AudioResource<unknown>
+        // );
+      }
+    } else {
+      audioPlayer.stop();
 
-          audioPlayer.removeAllListeners();
-        }
-      });
+      songsQueue.shift();
     }
   },
 };
