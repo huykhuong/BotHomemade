@@ -1,6 +1,10 @@
 import { createAudioPlayer } from "@discordjs/voice";
+import dotenv from "dotenv";
+import Spotify from "spotifydl-core/dist";
 
 import { BotHomemade, BotHomemadeMusicState } from "./types";
+
+dotenv.config();
 
 export const BotHomemadeGeneralState: BotHomemade = {
   voiceConnection: null,
@@ -22,12 +26,23 @@ export const BotHomemadeMusicStateManager: BotHomemadeMusicState = {
   paused: false,
   autoplay: false,
   spotify: {
+    downloaderInstance: new Spotify({
+      clientId: process.env.SPOTIFY_CLIENT_ID as string,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
+    }),
     expireTimestamp: "",
-    accessToken: "",
+    accessToken: null,
   },
 };
 
 // Clear General Audio State
 export const clearAudioState = () => {
   BotHomemadeMusicStateManager.songsQueue = [];
+  BotHomemadeMusicStateManager.paused = false;
+  BotHomemadeMusicStateManager.autoplay = false;
+  BotHomemadeMusicStateManager.spotify = {
+    expireTimestamp: "",
+    downloaderInstance: null,
+    accessToken: null,
+  };
 };

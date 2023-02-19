@@ -9,8 +9,8 @@ import { getRequesterName } from "../users";
 
 export const searchAndGetSpotifySong = async (
   message: Message,
-  query?: string,
-  nextURL?: string
+  query: string | undefined,
+  nextURL: string | undefined
 ) => {
   const {
     spotify: { accessToken, expireTimestamp },
@@ -74,6 +74,7 @@ async function searchSong(query: string, accessToken: string) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+
   const data = await response.json();
 
   const {

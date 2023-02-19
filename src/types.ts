@@ -1,5 +1,6 @@
 import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
+import SpotifyFetcher from "spotifydl-core/dist/Spotify";
 
 export type AvailableCommands =
   | "join"
@@ -43,6 +44,7 @@ export interface BotHomemadeMusicState {
   paused: boolean;
   autoplay: boolean;
   spotify: {
+    downloaderInstance: SpotifyFetcher | null;
     expireTimestamp: string;
     accessToken: string | null;
   };
