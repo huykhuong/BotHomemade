@@ -1,10 +1,9 @@
-import ytdl from "ytdl-core";
-
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel } from "./utils";
 
+import { BotHomemadeMusicStateManager } from "../StateManager";
 import { MusicCommand } from "../types";
-import { generateAudioStream } from "../utilities/commands/musicCommands";
+import { playSong } from "../utilities/commands/musicCommands";
 import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
 
@@ -13,15 +12,19 @@ export const skipCommand: MusicCommand = {
   name: "skip",
   run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
     // Extracting fields from state manager
-    const { songsQueue, autoplay } = botHomemadeMusicState;
+
     const { audioPlayer } = BotHomemadeGeneralState;
 
     if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
       return;
     }
 
-    if (!autoplay) {
-      if (songsQueue.length === 0) {
+    if (
+      !BotHomemadeMusicStateManager.autoplay ||
+      (BotHomemadeMusicStateManager.autoplay &&
+        botHomemadeMusicState.songsQueue.length > 1)
+    ) {
+      if (botHomemadeMusicState.songsQueue.length === 0) {
         message.channel.send({
           embeds: [
             {
@@ -32,7 +35,7 @@ export const skipCommand: MusicCommand = {
           ],
         });
         return;
-      } else if (songsQueue.length === 1) {
+      } else if (botHomemadeMusicState.songsQueue.length === 1) {
         message.channel.send({
           embeds: [
             {
@@ -50,7 +53,7 @@ export const skipCommand: MusicCommand = {
             {
               title: "Song queue",
               description: `${getRequesterName(message.author.id)} skips to \`${
-                songsQueue[1].title
+                botHomemadeMusicState.songsQueue[1].title
               }\``,
               color: colors.embedColor,
             },
@@ -59,21 +62,20 @@ export const skipCommand: MusicCommand = {
 
         audioPlayer.stop();
 
-        songsQueue.shift();
+        botHomemadeMusicState.songsQueue.shift();
 
-        if (ytdl.validateURL(songsQueue[0].url))
-          audioPlayer.play(generateAudioStream(songsQueue[0].url));
-
-        // audioPlayer.play(
-        //   (await generateSpotifyAudioStream(
-        //     songsQueue[0].url
-        //   )) as AudioResource<unknown>
-        // );
+        playSong(botHomemadeMusicState.songsQueue[0].url);
       }
-    } else {
+    } else if (
+      BotHomemadeMusicStateManager.autoplay &&
+      botHomemadeMusicState.songsQueue.length === 1
+    ) {
       audioPlayer.stop();
-
-      songsQueue.shift();
+    } else if (
+      BotHomemadeMusicStateManager.autoplay &&
+      botHomemadeMusicState.songsQueue.length === 0
+    ) {
+      audioPlayer.stop();
     }
   },
 };
