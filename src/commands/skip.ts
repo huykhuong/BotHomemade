@@ -1,30 +1,28 @@
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel } from "./utils";
 
-import { BotHomemadeMusicStateManager } from "../StateManager";
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "../StateManager";
 import { MusicCommand } from "../types";
-import { playSong } from "../utilities/commands/musicCommands";
 import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
 
 export const skipCommand: MusicCommand = {
   type: "music",
   name: "skip",
-  run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
+  run: async (message) => {
     // Extracting fields from state manager
-
     const { audioPlayer } = BotHomemadeGeneralState;
 
     if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed)) {
       return;
     }
 
-    if (
-      !BotHomemadeMusicStateManager.autoplay ||
-      (BotHomemadeMusicStateManager.autoplay &&
-        botHomemadeMusicState.songsQueue.length > 1)
-    ) {
-      if (botHomemadeMusicState.songsQueue.length === 0) {
+    // If Autoplay is not on, workflow is normal
+    if (!BotHomemadeMusicStateManager.autoplay) {
+      if (BotHomemadeMusicStateManager.songsQueue.length === 0) {
         message.channel.send({
           embeds: [
             {
@@ -35,7 +33,7 @@ export const skipCommand: MusicCommand = {
           ],
         });
         return;
-      } else if (botHomemadeMusicState.songsQueue.length === 1) {
+      } else if (BotHomemadeMusicStateManager.songsQueue.length === 1) {
         message.channel.send({
           embeds: [
             {
@@ -53,7 +51,7 @@ export const skipCommand: MusicCommand = {
             {
               title: "Song queue",
               description: `${getRequesterName(message.author.id)} skips to \`${
-                botHomemadeMusicState.songsQueue[1].title
+                BotHomemadeMusicStateManager.songsQueue[1].title
               }\``,
               color: colors.embedColor,
             },
@@ -61,20 +59,10 @@ export const skipCommand: MusicCommand = {
         });
 
         audioPlayer.stop();
-
-        botHomemadeMusicState.songsQueue.shift();
-
-        playSong(botHomemadeMusicState.songsQueue[0].url);
       }
-    } else if (
-      BotHomemadeMusicStateManager.autoplay &&
-      botHomemadeMusicState.songsQueue.length === 1
-    ) {
-      audioPlayer.stop();
-    } else if (
-      BotHomemadeMusicStateManager.autoplay &&
-      botHomemadeMusicState.songsQueue.length === 0
-    ) {
+    }
+    // If autoplay is on, just stop the audio and let the listener handle what happen next
+    else {
       audioPlayer.stop();
     }
   },
