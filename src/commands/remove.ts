@@ -8,25 +8,23 @@ import {
   sendRandomCommandResponse,
 } from "./utils";
 
-import { BotHomemade, BotHomemadeMusicState, MusicCommand } from "../types";
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "../StateManager";
+import { MusicCommand } from "../types";
 import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
 
 export const removeCommand: MusicCommand = {
   type: "music",
   name: "remove",
-  run: async (
-    message: Message<boolean>,
-    botHomemadeMusicState: BotHomemadeMusicState,
-    BotHomemadeGeneralState: BotHomemade
-  ) => {
+  run: async (message: Message) => {
     const commandAndBody = message.content.split(" ");
     const queuePositionToBeRemoved = Number(commandAndBody[1]);
 
     // Extracting response samples
     const { notInARoom, notInSameRoom } = responseSamples.skipCommand;
-
-    const { songsQueue } = botHomemadeMusicState;
 
     const { voiceConnection } = BotHomemadeGeneralState;
 
@@ -70,7 +68,7 @@ export const removeCommand: MusicCommand = {
     }
 
     // Check if the queue is empty
-    if (isEmpty(songsQueue)) {
+    if (isEmpty(BotHomemadeMusicStateManager.songsQueue)) {
       message.channel.send({
         embeds: messageBuilder("The queue is empty"),
       });
@@ -79,7 +77,8 @@ export const removeCommand: MusicCommand = {
 
     // Check if the queue position is out of boundary of song queue
     if (
-      queuePositionToBeRemoved > songsQueue.length ||
+      queuePositionToBeRemoved >
+        BotHomemadeMusicStateManager.songsQueue.length ||
       queuePositionToBeRemoved < 1
     ) {
       message.channel.send({
@@ -91,8 +90,13 @@ export const removeCommand: MusicCommand = {
     // ------------------------------------------
 
     // Get on with the actual removal of the song
-    const songName = songsQueue[queuePositionToBeRemoved - 1].title;
-    songsQueue.splice(queuePositionToBeRemoved - 1, 1);
+    const songName =
+      BotHomemadeMusicStateManager.songsQueue[queuePositionToBeRemoved - 1]
+        .title;
+    BotHomemadeMusicStateManager.songsQueue.splice(
+      queuePositionToBeRemoved - 1,
+      1
+    );
 
     message.channel.send({
       embeds: messageBuilder(
