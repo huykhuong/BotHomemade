@@ -1,11 +1,15 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { APIEmbed } from "discord.js";
+import { APIEmbed, Message } from "discord.js";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel, createVoiceConnection } from "./utils";
 
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "../StateManager";
 import { MusicCommand, Song } from "../types";
 import { getQuery } from "../utilities/commands";
 import { generateAudioStream } from "../utilities/commands/musicCommands";
@@ -15,9 +19,8 @@ import { colors } from "../variables";
 export const playCommand: MusicCommand = {
   type: "music",
   name: "play",
-  run: async (message, botHomemadeMusicState, BotHomemadeGeneralState) => {
+  run: async (message: Message) => {
     // Extracting fields from state manager
-    const { songsQueue: queue } = botHomemadeMusicState;
     const { audioPlayer } = BotHomemadeGeneralState;
 
     if (!BotHomemadeGeneralState) return;
@@ -59,9 +62,9 @@ export const playCommand: MusicCommand = {
         requester: getRequesterName(message.author.id),
       };
 
-      queue.push(song);
+      BotHomemadeMusicStateManager.songsQueue.push(song);
 
-      if (queue.length > 1) {
+      if (BotHomemadeMusicStateManager.songsQueue.length > 1) {
         message.channel.send({
           embeds: [
             {
@@ -76,9 +79,11 @@ export const playCommand: MusicCommand = {
       }
 
       //Play song immediately if only 1 song in queue
-      if (queue.length === 1) {
+      if (BotHomemadeMusicStateManager.songsQueue.length === 1) {
         message.channel.send({
-          embeds: playingSongEmbedBuilder(queue[0]),
+          embeds: playingSongEmbedBuilder(
+            BotHomemadeMusicStateManager.songsQueue[0]
+          ),
         });
 
         audioPlayer.play(generateAudioStream(resultInfo.url));
@@ -88,17 +93,19 @@ export const playCommand: MusicCommand = {
       audioPlayer.removeAllListeners();
 
       audioPlayer.on(AudioPlayerStatus.Idle, () => {
-        queue.shift();
+        BotHomemadeMusicStateManager.songsQueue.shift();
 
-        if (queue.length !== 0) {
+        if (BotHomemadeMusicStateManager.songsQueue.length !== 0) {
           message.channel.send({
-            embeds: playingSongEmbedBuilder(queue[0]),
+            embeds: playingSongEmbedBuilder(
+              BotHomemadeMusicStateManager.songsQueue[0]
+            ),
           });
 
           audioPlayer.play(generateAudioStream(resultInfo.url));
         }
 
-        if (queue.length === 0) {
+        if (BotHomemadeMusicStateManager.songsQueue.length === 0) {
           message.channel.send({
             embeds: [
               {
