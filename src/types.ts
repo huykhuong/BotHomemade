@@ -62,18 +62,11 @@ export interface BotHomemadeMusicState {
 
 // Command Types
 export interface GeneralCommand extends AbstractCommand<"general"> {
-  run: (
-    message: Message,
-    BotHomemadeGeneralState: BotHomemade
-  ) => Promise<void>;
+  run: (message: Message) => Promise<void>;
 }
 
 export interface MusicCommand extends AbstractCommand<"music"> {
-  run: (
-    message: Message,
-    botHomemadeMusicState: BotHomemadeMusicState,
-    BotHomemadeGeneralState: BotHomemade
-  ) => Promise<void>;
+  run: (message: Message) => Promise<void>;
 }
 
 export type Command = GeneralCommand | MusicCommand;

@@ -15,7 +15,7 @@ import { colors } from "../variables";
 export const unpauseCommand: MusicCommand = {
   type: "music",
   name: "unpause",
-  run: async (message: Message<boolean>) => {
+  run: async (message: Message) => {
     if (!checkInVoiceChannel(message, responseSamples.pauseCommand.notInARoom))
       return;
 
