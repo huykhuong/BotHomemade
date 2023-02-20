@@ -36,7 +36,9 @@ async function buildSongObject(
 
   if (!nextURL) {
     const searchResult = await searchSong(
-      `https://api.spotify.com/v1/search?query=${query}&type=track&locale=*&offset=0&limit=1`,
+      `https://api.spotify.com/v1/search?query=${encodeURIComponent(
+        query || ""
+      )}&type=track&locale=*&offset=${Math.floor(Math.random() * 300)}&limit=1`,
       accessToken
     );
 
