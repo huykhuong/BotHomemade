@@ -8,13 +8,9 @@ export const generateAutoplayTrack = async (
   rootSong: Song,
   message: Message
 ): Promise<Song | undefined> => {
-  const { nextURL, author } = rootSong;
+  const { author } = rootSong;
 
-  const SpotifySongObj = await searchAndGetSpotifySong(
-    message,
-    author,
-    nextURL
-  );
+  const SpotifySongObj = await searchAndGetSpotifySong(message, author);
 
   // Error checking
   if (!SpotifySongObj) {
