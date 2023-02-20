@@ -35,7 +35,17 @@ export interface Song {
   thumbnail: string;
   duration: string;
   requester: string;
-  nextURL?: string;
+}
+
+// SpotifySearchResult interface
+export interface SpotifySearchResult {
+  spotify: string;
+  name: string;
+  artists: {
+    name: string;
+  }[];
+  album: { images: { url: string }[] };
+  duration_ms: number;
 }
 
 // Music State

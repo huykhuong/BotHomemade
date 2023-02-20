@@ -50,7 +50,7 @@ export const createSongObject = (
   author: string,
   thumbnail: string,
   duration: string,
-  nextURL: string,
+
   requester: string
 ): Song => {
   const song: Song = {
@@ -60,7 +60,6 @@ export const createSongObject = (
     thumbnail,
     duration,
     requester,
-    nextURL,
   };
 
   return song;
