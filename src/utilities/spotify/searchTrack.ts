@@ -39,6 +39,7 @@ async function buildSongObject(
     accessToken
   );
 
+
   songObj = createSongObject(
     searchResult.spotify,
     searchResult.name,

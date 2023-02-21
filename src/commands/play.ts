@@ -94,6 +94,7 @@ export const playCommand: MusicCommand = {
       // Must clear all listeners for every play command call
       audioPlayer.removeAllListeners();
 
+
       audioPlayer.on(AudioPlayerStatus.Idle, async () => {
         rootSong = BotHomemadeMusicStateManager.songsQueue.shift() as Song;
 
@@ -113,6 +114,7 @@ export const playCommand: MusicCommand = {
           BotHomemadeMusicStateManager.songsQueue.length === 0 &&
           !BotHomemadeMusicStateManager.autoplay
         ) {
+
           message.channel.send({
             embeds: [
               {
