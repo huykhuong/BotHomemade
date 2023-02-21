@@ -12,20 +12,22 @@ import {
 } from "../StateManager";
 import { MusicCommand, Song } from "../types";
 import { getQuery } from "../utilities/commands";
-import { generateAudioStream } from "../utilities/commands/musicCommands";
+import {
+  generateAudioStream,
+  playSong,
+} from "../utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "../utilities/spotify/autoplay";
 import { getRequesterName } from "../utilities/users";
 import { colors } from "../variables";
+
+let rootSong = {} as Song;
 
 export const playCommand: MusicCommand = {
   type: "music",
   name: "play",
   run: async (message: Message) => {
     // Extracting fields from state manager
-    const { audioPlayer } = BotHomemadeGeneralState;
-
-    if (!BotHomemadeGeneralState) return;
-
-    const { voiceConnection } = BotHomemadeGeneralState;
+    const { voiceConnection, audioPlayer } = BotHomemadeGeneralState;
 
     if (!checkInVoiceChannel(message, responseSamples.joinCommand.failed))
       return;
@@ -92,9 +94,11 @@ export const playCommand: MusicCommand = {
       // Must clear all listeners for every play command call
       audioPlayer.removeAllListeners();
 
-      audioPlayer.on(AudioPlayerStatus.Idle, () => {
-        BotHomemadeMusicStateManager.songsQueue.shift();
 
+      audioPlayer.on(AudioPlayerStatus.Idle, async () => {
+        rootSong = BotHomemadeMusicStateManager.songsQueue.shift() as Song;
+
+        // Continue to play next song normally
         if (BotHomemadeMusicStateManager.songsQueue.length !== 0) {
           message.channel.send({
             embeds: playingSongEmbedBuilder(
@@ -105,7 +109,12 @@ export const playCommand: MusicCommand = {
           audioPlayer.play(generateAudioStream(resultInfo.url));
         }
 
-        if (BotHomemadeMusicStateManager.songsQueue.length === 0) {
+        // If song queue is empty and autoplay is not turned on
+        if (
+          BotHomemadeMusicStateManager.songsQueue.length === 0 &&
+          !BotHomemadeMusicStateManager.autoplay
+        ) {
+
           message.channel.send({
             embeds: [
               {
@@ -117,6 +126,16 @@ export const playCommand: MusicCommand = {
           });
 
           audioPlayer.removeAllListeners();
+        } else if (
+          BotHomemadeMusicStateManager.songsQueue.length === 0 &&
+          BotHomemadeMusicStateManager.autoplay
+        ) {
+          const track = await generateAutoplayTrack(rootSong as Song, message);
+
+          if (!track) return;
+
+          BotHomemadeMusicStateManager.songsQueue.push(track);
+          playSong(BotHomemadeMusicStateManager.songsQueue[0].url);
         }
       });
     } else {
