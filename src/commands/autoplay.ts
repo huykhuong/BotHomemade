@@ -2,6 +2,8 @@ import { AudioPlayerStatus, AudioResource } from "@discordjs/voice";
 import { Message } from "discord.js";
 import { isEmpty } from "lodash/fp";
 
+import { playingSongEmbedBuilder } from "./play";
+
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
@@ -83,6 +85,13 @@ const autoplayCommand: MusicCommand = {
         if (!track) return;
 
         BotHomemadeMusicStateManager.songsQueue.push(track);
+
+        // Announce what song is playing
+        message.channel.send({
+          embeds: playingSongEmbedBuilder(
+            BotHomemadeMusicStateManager.songsQueue[0]
+          ),
+        });
 
         BotHomemadeGeneralState.audioPlayer.play(
           (await generateSpotifyAudioStream(

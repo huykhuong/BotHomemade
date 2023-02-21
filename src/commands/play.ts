@@ -1,5 +1,6 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { APIEmbed, Message } from "discord.js";
+import { isEmpty } from "lodash/fp";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
@@ -94,7 +95,6 @@ export const playCommand: MusicCommand = {
       // Must clear all listeners for every play command call
       audioPlayer.removeAllListeners();
 
-
       audioPlayer.on(AudioPlayerStatus.Idle, async () => {
         rootSong = BotHomemadeMusicStateManager.songsQueue.shift() as Song;
 
@@ -111,10 +111,9 @@ export const playCommand: MusicCommand = {
 
         // If song queue is empty and autoplay is not turned on
         if (
-          BotHomemadeMusicStateManager.songsQueue.length === 0 &&
+          isEmpty(BotHomemadeMusicStateManager.songsQueue) &&
           !BotHomemadeMusicStateManager.autoplay
         ) {
-
           message.channel.send({
             embeds: [
               {
@@ -127,7 +126,7 @@ export const playCommand: MusicCommand = {
 
           audioPlayer.removeAllListeners();
         } else if (
-          BotHomemadeMusicStateManager.songsQueue.length === 0 &&
+          isEmpty(BotHomemadeMusicStateManager.songsQueue) &&
           BotHomemadeMusicStateManager.autoplay
         ) {
           const track = await generateAutoplayTrack(rootSong as Song, message);
@@ -135,6 +134,14 @@ export const playCommand: MusicCommand = {
           if (!track) return;
 
           BotHomemadeMusicStateManager.songsQueue.push(track);
+
+          // Announce what song is playing
+          message.channel.send({
+            embeds: playingSongEmbedBuilder(
+              BotHomemadeMusicStateManager.songsQueue[0]
+            ),
+          });
+
           playSong(BotHomemadeMusicStateManager.songsQueue[0].url);
         }
       });
@@ -151,7 +158,7 @@ export const playCommand: MusicCommand = {
   },
 };
 
-function playingSongEmbedBuilder(song: Song): APIEmbed[] {
+export function playingSongEmbedBuilder(song: Song): APIEmbed[] {
   return [
     {
       title: `Playing ${song.title}`,
