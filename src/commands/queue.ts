@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 
 import { BotHomemadeMusicStateManager } from "../StateManager";
 import { MusicCommand } from "../types";
+import { sendMessageToChannel } from "../utilities/commands";
 import { colors } from "../variables";
 
 export const queueCommand: MusicCommand = {
@@ -9,15 +10,11 @@ export const queueCommand: MusicCommand = {
   name: "queue",
   run: async (message: Message) => {
     if (BotHomemadeMusicStateManager.songsQueue.length === 0) {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song queue",
-            description: "The queue is currently empty",
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Song queue",
+        "The queue is currently empty"
+      );
     } else {
       message.channel.send({
         embeds: [

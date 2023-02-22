@@ -6,8 +6,8 @@ import {
   BotHomemadeMusicStateManager,
 } from "../StateManager";
 import { MusicCommand } from "../types";
+import { sendMessageToChannel } from "../utilities/commands";
 import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
 
 export const skipCommand: MusicCommand = {
   type: "music",
@@ -23,40 +23,29 @@ export const skipCommand: MusicCommand = {
     // If Autoplay is not on, workflow is normal
     if (!BotHomemadeMusicStateManager.autoplay) {
       if (BotHomemadeMusicStateManager.songsQueue.length === 0) {
-        message.channel.send({
-          embeds: [
-            {
-              title: "Song queue",
-              description: "The queue is currently empty",
-              color: colors.embedColor,
-            },
-          ],
-        });
+        sendMessageToChannel(
+          message,
+          "Song queue",
+          "The queue is currently empty"
+        );
+
         return;
       } else if (BotHomemadeMusicStateManager.songsQueue.length === 1) {
-        message.channel.send({
-          embeds: [
-            {
-              title: "Song queue",
-              description:
-                "There is no more song left in the queue to be skipped to",
-              color: colors.embedColor,
-            },
-          ],
-        });
+        sendMessageToChannel(
+          message,
+          "Song queue",
+          "There is no more song left in the queue to be skipped to"
+        );
+
         return;
       } else {
-        message.channel.send({
-          embeds: [
-            {
-              title: "Song queue",
-              description: `${getRequesterName(message.author.id)} skips to \`${
-                BotHomemadeMusicStateManager.songsQueue[1].title
-              }\``,
-              color: colors.embedColor,
-            },
-          ],
-        });
+        sendMessageToChannel(
+          message,
+          "Song queue",
+          `${getRequesterName(message.author.id)} skips to \`${
+            BotHomemadeMusicStateManager.songsQueue[1].title
+          }\``
+        );
 
         audioPlayer.stop();
       }

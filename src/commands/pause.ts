@@ -9,8 +9,8 @@ import {
   BotHomemadeMusicStateManager,
 } from "../StateManager";
 import { MusicCommand } from "../types";
+import { sendMessageToChannel } from "../utilities/commands";
 import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
 
 export const pauseCommand: MusicCommand = {
   type: "music",
@@ -33,17 +33,11 @@ export const pauseCommand: MusicCommand = {
       audioPlayer.pause();
       BotHomemadeMusicStateManager.paused = true;
 
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song paused!",
-            description: `${getRequesterName(
-              message.author.id
-            )} pauses the song`,
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Song paused!",
+        `${getRequesterName(message.author.id)} pauses the song`
+      );
 
       return;
     }
