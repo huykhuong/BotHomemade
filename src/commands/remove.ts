@@ -1,4 +1,4 @@
-import { APIEmbed, Message } from "discord.js";
+import { Message } from "discord.js";
 import isEmpty from "lodash/isEmpty";
 
 import responseSamples from "./randomResponseCollection.json";
@@ -13,8 +13,8 @@ import {
   BotHomemadeMusicStateManager,
 } from "../StateManager";
 import { MusicCommand } from "../types";
+import { sendMessageToChannel } from "../utilities/commands";
 import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
 
 export const removeCommand: MusicCommand = {
   type: "music",
@@ -41,37 +41,41 @@ export const removeCommand: MusicCommand = {
     }
 
     if (commandAndBody.length <= 1) {
-      message.channel.send({
-        embeds: messageBuilder(
-          "Hmm, no queue position provided to be removed!"
-        ),
-      });
+      sendMessageToChannel(
+        message,
+        "Remove song",
+        "Hmm, no queue position provided to be removed!"
+      );
+
       return;
     }
 
     // Check if the queue position is not a number
     if (isNaN(queuePositionToBeRemoved)) {
-      message.channel.send({
-        embeds: messageBuilder("Bruh! Provide a number, not a text"),
-      });
+      sendMessageToChannel(
+        message,
+        "Remove song",
+        "Bruh! Provide a number, not a text"
+      );
+
       return;
     }
 
     // Check if the queue position is the song that is playing
     if (queuePositionToBeRemoved === 1) {
-      message.channel.send({
-        embeds: messageBuilder(
-          "Am singing this song, have some respect man 😠"
-        ),
-      });
+      sendMessageToChannel(
+        message,
+        "Remove song",
+        "Am singing this song, have some respect man 😠"
+      );
+
       return;
     }
 
     // Check if the queue is empty
     if (isEmpty(BotHomemadeMusicStateManager.songsQueue)) {
-      message.channel.send({
-        embeds: messageBuilder("The queue is empty"),
-      });
+      sendMessageToChannel(message, "Remove song", "The queue is empty");
+
       return;
     }
 
@@ -81,9 +85,12 @@ export const removeCommand: MusicCommand = {
         BotHomemadeMusicStateManager.songsQueue.length ||
       queuePositionToBeRemoved < 1
     ) {
-      message.channel.send({
-        embeds: messageBuilder("Can't find this song in the queue to remove"),
-      });
+      sendMessageToChannel(
+        message,
+        "Remove song",
+        "Can't find this song in the queue to remove"
+      );
+
       return;
     }
 
@@ -98,22 +105,12 @@ export const removeCommand: MusicCommand = {
       1
     );
 
-    message.channel.send({
-      embeds: messageBuilder(
-        `${getRequesterName(
-          message.author.id
-        )} removed \`${songName}\` from the queue`
-      ),
-    });
+    sendMessageToChannel(
+      message,
+      "Remove song",
+      `${getRequesterName(
+        message.author.id
+      )} removed \`${songName}\` from the queue`
+    );
   },
 };
-
-function messageBuilder(description: string): APIEmbed[] {
-  return [
-    {
-      title: "Remove song",
-      description,
-      color: colors.embedColor,
-    },
-  ];
-}

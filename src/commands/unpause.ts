@@ -9,8 +9,8 @@ import {
   BotHomemadeMusicStateManager,
 } from "../StateManager";
 import { MusicCommand } from "../types";
+import { sendMessageToChannel } from "../utilities/commands";
 import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
 
 export const unpauseCommand: MusicCommand = {
   type: "music",
@@ -32,16 +32,11 @@ export const unpauseCommand: MusicCommand = {
     if (paused) {
       audioPlayer.unpause();
       BotHomemadeMusicStateManager.paused = false;
-
-      message.channel.send({
-        embeds: [
-          {
-            title: "Unpaused!",
-            description: `${getRequesterName(message.author.id)} unpauses`,
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Unpaused",
+        `${getRequesterName(message.author.id)} unpauses`
+      );
 
       return;
     }
