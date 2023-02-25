@@ -5,15 +5,18 @@ import { isEmpty } from "lodash/fp";
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand, Song } from "../types";
+} from "../../StateManager";
+import { MusicCommand, Song } from "../../types";
+import {
+  sendMessageMusicToChannel,
+  sendMessageToChannel,
+} from "../../utilities/commands";
 import {
   generateSpotifyAudioStream,
   playSong,
-} from "../utilities/commands/musicCommands";
-import { generateAutoplayTrack } from "../utilities/spotify/autoplay";
-import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
+} from "../../utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "../../utilities/spotify/autoplay";
+import { getRequesterName } from "../../utilities/users";
 
 let rootSong = {} as Song;
 
@@ -25,16 +28,12 @@ const autoplayCommand: MusicCommand = {
 
     // Checking if no song is existing first
     if (isEmpty(BotHomemadeMusicStateManager.songsQueue)) {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Autoplay",
-            description:
-              "There must be at least one song in the queue before turning on Autoplay!",
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Autoplay",
+        "There must be at least one song in the queue before turning on Autoplay!"
+      );
+
       return;
     }
 
@@ -44,31 +43,20 @@ const autoplayCommand: MusicCommand = {
     audioPlayer.removeAllListeners();
 
     if (!BotHomemadeMusicStateManager.autoplay) {
-      message.channel.send({
-        embeds: [
-          {
-            title: "Autoplay",
-            description: `${getRequesterName(
-              message.author.id
-            )} turns off Autoplay`,
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Autoplay",
+        `${getRequesterName(message.author.id)} turns off Autoplay`
+      );
+
       return;
     }
 
-    message.channel.send({
-      embeds: [
-        {
-          title: "Autoplay",
-          description: `${getRequesterName(
-            message.author.id
-          )} turns on Autoplay`,
-          color: colors.embedColor,
-        },
-      ],
-    });
+    sendMessageToChannel(
+      message,
+      "Autoplay",
+      `${getRequesterName(message.author.id)} turns on Autoplay`
+    );
 
     audioPlayer.addListener(AudioPlayerStatus.Idle, async () => {
       rootSong = BotHomemadeMusicStateManager.songsQueue.shift() as Song;
@@ -83,6 +71,12 @@ const autoplayCommand: MusicCommand = {
         if (!track) return;
 
         BotHomemadeMusicStateManager.songsQueue.push(track);
+
+        // Announce what song is playing
+        sendMessageMusicToChannel(
+          message,
+          BotHomemadeMusicStateManager.songsQueue[0]
+        );
 
         BotHomemadeGeneralState.audioPlayer.play(
           (await generateSpotifyAudioStream(

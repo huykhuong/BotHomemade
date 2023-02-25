@@ -1,21 +1,20 @@
 import { Message } from "discord.js";
 import { isEmpty } from "lodash/fp";
 
-import responseSamples from "./randomResponseCollection.json";
-import { checkInVoiceChannel, sendRandomCommandResponse } from "./utils";
-
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand } from "../types";
-import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
+} from "../../StateManager";
+import { MusicCommand } from "../../types";
+import { sendMessageToChannel } from "../../utilities/commands";
+import { getRequesterName } from "../../utilities/users";
+import responseSamples from "../randomResponseCollection.json";
+import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
 export const pauseCommand: MusicCommand = {
   type: "music",
   name: "pause",
-  run: async (message: Message<boolean>) => {
+  run: async (message: Message) => {
     if (!checkInVoiceChannel(message, responseSamples.pauseCommand.notInARoom))
       return;
 
@@ -33,17 +32,11 @@ export const pauseCommand: MusicCommand = {
       audioPlayer.pause();
       BotHomemadeMusicStateManager.paused = true;
 
-      message.channel.send({
-        embeds: [
-          {
-            title: "Song paused!",
-            description: `${getRequesterName(
-              message.author.id
-            )} pauses the song`,
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Song paused!",
+        `${getRequesterName(message.author.id)} pauses the song`
+      );
 
       return;
     }

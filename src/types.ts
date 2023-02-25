@@ -10,7 +10,8 @@ export type AvailableCommands =
   | "remove"
   | "pause"
   | "unpause"
-  | "autoplay";
+  | "autoplay"
+  | "lck";
 
 type CommandTypes = "general" | "music";
 
@@ -35,7 +36,17 @@ export interface Song {
   thumbnail: string;
   duration: string;
   requester: string;
-  nextURL?: string;
+}
+
+// SpotifySearchResult interface
+export interface SpotifySearchResult {
+  spotify: string;
+  name: string;
+  artists: {
+    name: string;
+  }[];
+  album: { images: { url: string }[] };
+  duration_ms: number;
 }
 
 // Music State
@@ -52,18 +63,11 @@ export interface BotHomemadeMusicState {
 
 // Command Types
 export interface GeneralCommand extends AbstractCommand<"general"> {
-  run: (
-    message: Message,
-    BotHomemadeGeneralState: BotHomemade
-  ) => Promise<void>;
+  run: (message: Message) => Promise<void>;
 }
 
 export interface MusicCommand extends AbstractCommand<"music"> {
-  run: (
-    message: Message,
-    botHomemadeMusicState: BotHomemadeMusicState,
-    BotHomemadeGeneralState: BotHomemade
-  ) => Promise<void>;
+  run: (message: Message) => Promise<void>;
 }
 
 export type Command = GeneralCommand | MusicCommand;

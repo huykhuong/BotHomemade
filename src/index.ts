@@ -1,12 +1,7 @@
 import { Client, GatewayIntentBits, Partials, ActivityType } from "discord.js";
 import dotenv from "dotenv";
 
-import {
-  BotHomemadeGeneralState,
-  BotHomemadeMusicStateManager,
-  clearAudioState,
-  clearGeneralState,
-} from "./StateManager";
+import { clearAudioState, clearGeneralState } from "./StateManager";
 dotenv.config();
 import { AvailableCommands } from "./types";
 import { extractCommandNameFromText, getCommand } from "./utilities/commands";
@@ -61,14 +56,10 @@ client.on("messageCreate", async (message) => {
   if (command) {
     switch (command.type) {
       case "general":
-        command.run(message, BotHomemadeGeneralState);
+        command.run(message);
         break;
       case "music":
-        command.run(
-          message,
-          BotHomemadeMusicStateManager,
-          BotHomemadeGeneralState
-        );
+        command.run(message);
         break;
     }
   } else {

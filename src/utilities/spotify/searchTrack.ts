@@ -3,14 +3,13 @@ import { Message } from "discord.js";
 import { authenticateAccessToken } from "./authenticate";
 
 import { BotHomemadeMusicStateManager } from "../../StateManager";
-import { Song } from "../../types";
+import { Song, SpotifySearchResult } from "../../types";
 import { createSongObject } from "../commands/musicCommands";
 import { getRequesterName } from "../users";
 
 export const searchAndGetSpotifySong = async (
   message: Message,
-  query: string | undefined,
-  nextURL: string | undefined
+  author: string | undefined
 ) => {
   const {
     spotify: { accessToken, expireTimestamp },
@@ -20,57 +19,43 @@ export const searchAndGetSpotifySong = async (
   if (!accessToken || Date.now() > Date.parse(expireTimestamp)) {
     const newlyRequestedAccessToken = await authenticateAccessToken();
 
-    return buildSongObject(message, nextURL, query, newlyRequestedAccessToken);
+    return buildSongObject(message, author, newlyRequestedAccessToken);
   }
 
-  return buildSongObject(message, nextURL, query, accessToken);
+  return buildSongObject(message, author, accessToken);
 };
 
 async function buildSongObject(
   message: Message,
-  nextURL: string | undefined,
-  query: string | undefined,
+  author: string | undefined,
   accessToken: string
 ) {
   let songObj = {} as Song;
 
-  if (!nextURL) {
-    const searchResult = await searchSong(
-      `https://api.spotify.com/v1/search?query=${encodeURIComponent(
-        query || ""
-      )}&type=track&locale=*&offset=${Math.floor(Math.random() * 300)}&limit=1`,
-      accessToken
-    );
+  const searchResult = await searchSong(
+    `https://api.spotify.com/v1/search?query=${encodeURIComponent(
+      author || ""
+    )}&type=track&locale=*&offset=${Math.floor(Math.random() * 50)}&limit=1`,
+    accessToken
+  );
 
-    songObj = createSongObject(
-      searchResult.spotify,
-      searchResult.name,
-      searchResult.artists[0].name,
-      searchResult.album.images[0].url,
-      searchResult.duration_ms,
-      searchResult.nextURL,
-      getRequesterName(message.author.id)
-    );
-  }
-  // This part is for Autoplay, getting link from Spotify's next link
-  else {
-    const searchResult = await searchSong(nextURL, accessToken);
 
-    songObj = createSongObject(
-      searchResult.spotify,
-      searchResult.name,
-      searchResult.artists[0].name,
-      searchResult.album.images[0].url,
-      searchResult.duration_ms,
-      searchResult.nextURL,
-      getRequesterName(message.author.id)
-    );
-  }
+  songObj = createSongObject(
+    searchResult.spotify,
+    searchResult.name,
+    searchResult.artists[0]?.name,
+    searchResult.album.images[0].url,
+    searchResult.duration_ms.toString(),
+    getRequesterName(message.author.id)
+  );
 
   return songObj;
 }
 
-async function searchSong(query: string, accessToken: string) {
+async function searchSong(
+  query: string,
+  accessToken: string
+): Promise<SpotifySearchResult> {
   const response = await fetch(query, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -79,20 +64,28 @@ async function searchSong(query: string, accessToken: string) {
 
   const data = await response.json();
 
-  const {
-    external_urls: { spotify },
-    name,
-    artists,
-    album,
-    duration_ms,
-  } = data.tracks.items[0];
+  if (!data.tracks.items[0]) {
+    return searchSong(
+      `https://api.spotify.com/v1/search?query=%25a%25&type=track&locale=*&offset=${Math.floor(
+        Math.random() * 10
+      )}&limit=1`,
+      accessToken
+    );
+  } else {
+    const {
+      external_urls: { spotify },
+      name,
+      artists,
+      album,
+      duration_ms,
+    } = data.tracks.items[0];
 
-  return {
-    spotify,
-    name,
-    artists,
-    album,
-    duration_ms,
-    nextURL: data.tracks.next,
-  };
+    return {
+      spotify,
+      name,
+      artists,
+      album,
+      duration_ms,
+    };
+  }
 }

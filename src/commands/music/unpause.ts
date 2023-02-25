@@ -1,21 +1,20 @@
 import { Message } from "discord.js";
 import { isEmpty } from "lodash";
 
-import responseSamples from "./randomResponseCollection.json";
-import { checkInVoiceChannel, sendRandomCommandResponse } from "./utils";
-
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand } from "../types";
-import { getRequesterName } from "../utilities/users";
-import { colors } from "../variables";
+} from "../../StateManager";
+import { MusicCommand } from "../../types";
+import { sendMessageToChannel } from "../../utilities/commands";
+import { getRequesterName } from "../../utilities/users";
+import responseSamples from "../randomResponseCollection.json";
+import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
 export const unpauseCommand: MusicCommand = {
   type: "music",
   name: "unpause",
-  run: async (message: Message<boolean>) => {
+  run: async (message: Message) => {
     if (!checkInVoiceChannel(message, responseSamples.pauseCommand.notInARoom))
       return;
 
@@ -32,16 +31,11 @@ export const unpauseCommand: MusicCommand = {
     if (paused) {
       audioPlayer.unpause();
       BotHomemadeMusicStateManager.paused = false;
-
-      message.channel.send({
-        embeds: [
-          {
-            title: "Unpaused!",
-            description: `${getRequesterName(message.author.id)} unpauses`,
-            color: colors.embedColor,
-          },
-        ],
-      });
+      sendMessageToChannel(
+        message,
+        "Unpaused",
+        `${getRequesterName(message.author.id)} unpauses`
+      );
 
       return;
     }
