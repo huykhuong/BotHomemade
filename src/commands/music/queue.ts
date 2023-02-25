@@ -1,9 +1,9 @@
 import { Message } from "discord.js";
 
-import { BotHomemadeMusicStateManager } from "../StateManager";
-import { MusicCommand } from "../types";
-import { sendMessageToChannel } from "../utilities/commands";
-import { colors } from "../variables";
+import { BotHomemadeMusicStateManager } from "../../StateManager";
+import { MusicCommand } from "../../types";
+import { sendMessageToChannel } from "../../utilities/commands";
+import { colors } from "../../variables";
 
 export const queueCommand: MusicCommand = {
   type: "music",

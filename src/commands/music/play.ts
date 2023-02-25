@@ -4,25 +4,24 @@ import { isEmpty } from "lodash/fp";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
-import responseSamples from "./randomResponseCollection.json";
-import { checkInVoiceChannel, createVoiceConnection } from "./utils";
-
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand, Song } from "../types";
+} from "../../StateManager";
+import { MusicCommand, Song } from "../../types";
 import {
   getQuery,
   sendMessageMusicToChannel,
   sendMessageToChannel,
-} from "../utilities/commands";
+} from "../../utilities/commands";
 import {
   generateAudioStream,
   playSong,
-} from "../utilities/commands/musicCommands";
-import { generateAutoplayTrack } from "../utilities/spotify/autoplay";
-import { getRequesterName } from "../utilities/users";
+} from "../../utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "../../utilities/spotify/autoplay";
+import { getRequesterName } from "../../utilities/users";
+import responseSamples from "../randomResponseCollection.json";
+import { checkInVoiceChannel, createVoiceConnection } from "../utils";
 
 let rootSong = {} as Song;
 

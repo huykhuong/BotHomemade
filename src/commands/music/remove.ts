@@ -1,20 +1,19 @@
 import { Message } from "discord.js";
 import isEmpty from "lodash/isEmpty";
 
-import responseSamples from "./randomResponseCollection.json";
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "../../StateManager";
+import { MusicCommand } from "../../types";
+import { sendMessageToChannel } from "../../utilities/commands";
+import { getRequesterName } from "../../utilities/users";
+import responseSamples from "../randomResponseCollection.json";
 import {
   checkInVoiceChannel,
   checkIsPlayingMusicOrInVoiceChannel,
   sendRandomCommandResponse,
-} from "./utils";
-
-import {
-  BotHomemadeGeneralState,
-  BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand } from "../types";
-import { sendMessageToChannel } from "../utilities/commands";
-import { getRequesterName } from "../utilities/users";
+} from "../utils";
 
 export const removeCommand: MusicCommand = {
   type: "music",
