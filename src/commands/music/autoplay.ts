@@ -5,18 +5,18 @@ import { isEmpty } from "lodash/fp";
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../StateManager";
-import { MusicCommand, Song } from "../types";
+} from "../../StateManager";
+import { MusicCommand, Song } from "../../types";
 import {
   sendMessageMusicToChannel,
   sendMessageToChannel,
-} from "../utilities/commands";
+} from "../../utilities/commands";
 import {
   generateSpotifyAudioStream,
   playSong,
-} from "../utilities/commands/musicCommands";
-import { generateAutoplayTrack } from "../utilities/spotify/autoplay";
-import { getRequesterName } from "../utilities/users";
+} from "../../utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "../../utilities/spotify/autoplay";
+import { getRequesterName } from "../../utilities/users";
 
 let rootSong = {} as Song;
 
