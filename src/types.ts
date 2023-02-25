@@ -10,7 +10,8 @@ export type AvailableCommands =
   | "remove"
   | "pause"
   | "unpause"
-  | "autoplay";
+  | "autoplay"
+  | "lck";
 
 type CommandTypes = "general" | "music";
 

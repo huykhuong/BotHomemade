@@ -1,13 +1,14 @@
 import { Message } from "discord.js";
 
-import autoplayCommand from "../../commands/autoplay";
 import { joinCommand } from "../../commands/join";
-import { pauseCommand } from "../../commands/pause";
-import { playCommand } from "../../commands/play";
-import { queueCommand } from "../../commands/queue";
-import { removeCommand } from "../../commands/remove";
-import { skipCommand } from "../../commands/skip";
-import { unpauseCommand } from "../../commands/unpause";
+import { lckCommand } from "../../commands/lolSchedule/lck";
+import autoplayCommand from "../../commands/music/autoplay";
+import { pauseCommand } from "../../commands/music/pause";
+import { playCommand } from "../../commands/music/play";
+import { queueCommand } from "../../commands/music/queue";
+import { removeCommand } from "../../commands/music/remove";
+import { skipCommand } from "../../commands/music/skip";
+import { unpauseCommand } from "../../commands/music/unpause";
 import { AvailableCommands, Command, Song } from "../../types";
 import { colors } from "../../variables";
 
@@ -44,6 +45,8 @@ export const getCommand = (commandName: AvailableCommands): Command | null => {
       return unpauseCommand;
     case "autoplay":
       return autoplayCommand;
+    case "lck":
+      return lckCommand;
     default:
       return null;
   }
