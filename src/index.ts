@@ -74,12 +74,10 @@ client.on("voiceStateUpdate", (oldState, newState) => {
     if (!newState) return;
 
     // Bot was disconnected
-    if (newState) {
-      if ((newState.id as string) === client.user?.id) {
-        clearGeneralState();
-        clearAudioState();
-        return;
-      }
+    if ((newState.id as string) === client.user?.id) {
+      clearGeneralState();
+      clearAudioState();
+      return;
     }
   }
 });
