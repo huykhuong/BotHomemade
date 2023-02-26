@@ -47,7 +47,7 @@ export interface SpotifySearchResult {
     name: string;
   }[];
   album: { images: { url: string }[] };
-  duration_ms: number;
+  duration: string;
 }
 
 // Music State
