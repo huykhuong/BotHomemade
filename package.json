@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tscheck": "tsc --noemit --pretty"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
