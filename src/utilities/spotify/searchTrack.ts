@@ -4,7 +4,6 @@ import { Message } from "discord.js";
 
 import { authenticateAccessToken } from "./authenticate";
 
-
 import { createSongObject } from "../commands/musicCommands";
 import { getRequesterName } from "../users";
 
@@ -45,7 +44,7 @@ async function buildSongObject(
     searchResult.name,
     searchResult.artists[0]?.name,
     searchResult.album.images[0].url,
-    searchResult.duration_ms.toString(),
+    searchResult.duration,
     getRequesterName(message.author.id)
   );
 
@@ -80,12 +79,20 @@ async function searchSong(
       duration_ms,
     } = data.tracks.items[0];
 
+    const minutes = duration_ms / 1000 / 60;
+
+    const roundedDownMinutes = Math.floor(minutes);
+
+    const leftOverSeconds = Math.round((minutes - roundedDownMinutes) * 60);
+
     return {
       spotify,
       name,
       artists,
       album,
-      duration_ms,
+      duration: `${roundedDownMinutes}:${leftOverSeconds
+        .toString()
+        .padStart(2, "0")}`,
     };
   }
 }
