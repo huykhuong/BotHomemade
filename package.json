@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node ./index.ts",
-    "lint": "eslint \"**/*.{ts,tsx}\""
+    "start": "ts-node src/index.ts",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
@@ -39,7 +40,8 @@
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^3.14.2"
   },
   "husky": {
     "hooks": {

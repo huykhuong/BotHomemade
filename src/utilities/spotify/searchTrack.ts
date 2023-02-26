@@ -1,9 +1,10 @@
+import { BotHomemadeMusicStateManager } from "@StateManager";
+import { Song, SpotifySearchResult } from "@types";
 import { Message } from "discord.js";
 
 import { authenticateAccessToken } from "./authenticate";
 
-import { BotHomemadeMusicStateManager } from "../../StateManager";
-import { Song, SpotifySearchResult } from "../../types";
+
 import { createSongObject } from "../commands/musicCommands";
 import { getRequesterName } from "../users";
 
@@ -38,7 +39,6 @@ async function buildSongObject(
     )}&type=track&locale=*&offset=${Math.floor(Math.random() * 50)}&limit=1`,
     accessToken
   );
-
 
   songObj = createSongObject(
     searchResult.spotify,

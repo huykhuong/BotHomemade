@@ -1,17 +1,17 @@
-import { Message } from "discord.js";
 
-import { joinCommand } from "../../commands/join";
-import lckCommand from "../../commands/lolSchedule/lck";
-import autoplayCommand from "../../commands/music/autoplay";
-import pauseCommand from "../../commands/music/pause";
-import playCommand from "../../commands/music/play";
-import queueCommand from "../../commands/music/queue";
-import removeCommand from "../../commands/music/remove";
-import skipCommand from "../../commands/music/skip";
-import stopCommand from "../../commands/music/stop";
-import unpauseCommand from "../../commands/music/unpause";
-import { AvailableCommands, Command, Song } from "../../types";
-import { colors } from "../../variables";
+import { joinCommand } from "@commands/join";
+import lckCommand from "@commands/lolSchedule/lck";
+import autoplayCommand from "@commands/music/autoplay";
+import pauseCommand from "@commands/music/pause";
+import playCommand from "@commands/music/play";
+import queueCommand from "@commands/music/queue";
+import removeCommand from "@commands/music/remove";
+import skipCommand from "@commands/music/skip";
+import stopCommand from "@commands/music/stop";
+import unpauseCommand from "@commands/music/unpause";
+import { AvailableCommands, Command, Song } from "@types";
+import { colors } from "@variables";
+import { Message } from "discord.js";
 
 // Get The Command Name
 export const extractCommandNameFromText = (

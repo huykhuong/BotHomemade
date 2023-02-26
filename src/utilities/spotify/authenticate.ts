@@ -1,4 +1,4 @@
-import { BotHomemadeMusicStateManager } from "../../StateManager";
+import { BotHomemadeMusicStateManager } from "@StateManager";
 
 export const authenticateAccessToken = () => {
   const currentTime = new Date(Date.now());

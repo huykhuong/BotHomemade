@@ -1,12 +1,11 @@
+import { BotHomemadeGeneralState } from "@StateManager";
 import {
   AudioPlayer,
   joinVoiceChannel,
   VoiceConnection,
 } from "@discordjs/voice";
+import { BotHomemade } from "@types";
 import { Message } from "discord.js";
-
-import { BotHomemadeGeneralState } from "../StateManager";
-import { BotHomemade } from "../types";
 
 export const sendRandomCommandResponse = (respArr: string[]): string => {
   return respArr[Math.floor(Math.random() * respArr.length)];

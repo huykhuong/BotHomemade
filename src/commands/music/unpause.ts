@@ -1,13 +1,13 @@
-import { Message } from "discord.js";
-import { isEmpty } from "lodash";
-
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../../StateManager";
-import { MusicCommand } from "../../types";
-import { sendMessageToChannel } from "../../utilities/commands";
-import { getRequesterName } from "../../utilities/users";
+} from "@StateManager";
+import { MusicCommand } from "@types";
+import { sendMessageToChannel } from "@utilities/commands";
+import { getRequesterName } from "@utilities/users";
+import { Message } from "discord.js";
+import { isEmpty } from "lodash";
+
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 

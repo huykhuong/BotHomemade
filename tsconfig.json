@@ -2,12 +2,23 @@
   "compilerOptions": {
     "target": "es6",
     "module": "CommonJS",
-
+    "baseUrl": "src/",
     "rootDir": "src",
     "strict": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@commands/*": ["commands/*"],
+      "@utilities/*": ["utilities/*"],
+      "@types": ["types"],
+      "@variables": ["variables"],
+      "@StateManager": ["StateManager"]
+    }
   },
-  "exclude": ["./node_modules"]
+  "exclude": ["./node_modules"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

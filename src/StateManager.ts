@@ -1,8 +1,8 @@
 import { createAudioPlayer } from "@discordjs/voice";
+import { BotHomemade, BotHomemadeMusicState } from "@types";
 import dotenv from "dotenv";
 import Spotify from "spotifydl-core/dist";
 
-import { BotHomemade, BotHomemadeMusicState } from "./types";
 
 dotenv.config();
 

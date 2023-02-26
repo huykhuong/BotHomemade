@@ -1,8 +1,9 @@
+import { BotHomemadeGeneralState } from "@StateManager";
+import { GeneralCommand } from "@types";
+
 import responseSamples from "./randomResponseCollection.json";
 import { checkInVoiceChannel, createVoiceConnection } from "./utils";
 
-import { BotHomemadeGeneralState } from "../StateManager";
-import { GeneralCommand } from "../types";
 
 export const joinCommand: GeneralCommand = {
   type: "general",
