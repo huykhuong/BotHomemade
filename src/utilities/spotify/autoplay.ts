@@ -1,8 +1,8 @@
+import { Song } from "@types";
 import { Message } from "discord.js";
 
 import { searchAndGetSpotifySong } from "./searchTrack";
 
-import { Song } from "../../types";
 
 export const generateAutoplayTrack = async (
   rootSong: Song,

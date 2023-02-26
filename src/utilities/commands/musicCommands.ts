@@ -1,14 +1,14 @@
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "@StateManager";
 import { AudioResource, createAudioResource } from "@discordjs/voice";
+import { Song } from "@types";
 import SpotifyFetcher from "spotifydl-core/dist/Spotify";
 import ytdl from "ytdl-core";
 
 import { Readable } from "stream";
 
-import {
-  BotHomemadeGeneralState,
-  BotHomemadeMusicStateManager,
-} from "../../StateManager";
-import { Song } from "../../types";
 
 export const generateAudioStream = (link: string): AudioResource => {
   const track = ytdl(link || "", {

@@ -1,11 +1,10 @@
+import { clearAudioState, clearGeneralState } from "@StateManager";
+import { AvailableCommands } from "@types";
+import { extractCommandNameFromText, getCommand } from "@utilities/commands";
+import { commandAliases } from "@variables";
 import { Client, GatewayIntentBits, Partials, ActivityType } from "discord.js";
 import dotenv from "dotenv";
-
-import { clearAudioState, clearGeneralState } from "./StateManager";
 dotenv.config();
-import { AvailableCommands } from "./types";
-import { extractCommandNameFromText, getCommand } from "./utilities/commands";
-import { commandAliases } from "./variables";
 
 //Config
 const CONFIG = {

@@ -1,10 +1,11 @@
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../../StateManager";
-import { MusicCommand } from "../../types";
-import { sendMessageToChannel } from "../../utilities/commands";
-import { getRequesterName } from "../../utilities/users";
+} from "@StateManager";
+import { MusicCommand } from "@types";
+import { sendMessageToChannel } from "@utilities/commands";
+import { getRequesterName } from "@utilities/users";
+
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel } from "../utils";
 

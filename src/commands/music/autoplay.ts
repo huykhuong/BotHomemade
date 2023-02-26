@@ -1,22 +1,21 @@
-import { AudioPlayerStatus, AudioResource } from "@discordjs/voice";
-import { Message } from "discord.js";
-import { isEmpty } from "lodash/fp";
-
 import {
   BotHomemadeGeneralState,
   BotHomemadeMusicStateManager,
-} from "../../StateManager";
-import { MusicCommand, Song } from "../../types";
+} from "@StateManager";
+import { AudioPlayerStatus, AudioResource } from "@discordjs/voice";
+import { MusicCommand, Song } from "@types";
 import {
   sendMessageMusicToChannel,
   sendMessageToChannel,
-} from "../../utilities/commands";
+} from "@utilities/commands";
 import {
   generateSpotifyAudioStream,
   playSong,
-} from "../../utilities/commands/musicCommands";
-import { generateAutoplayTrack } from "../../utilities/spotify/autoplay";
-import { getRequesterName } from "../../utilities/users";
+} from "@utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "@utilities/spotify/autoplay";
+import { getRequesterName } from "@utilities/users";
+import { Message } from "discord.js";
+import { isEmpty } from "lodash/fp";
 
 let rootSong = {} as Song;
 

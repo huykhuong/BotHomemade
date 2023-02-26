@@ -1,9 +1,9 @@
+import { GeneralCommand } from "@types";
+import { colors } from "@variables";
 import { Message } from "discord.js";
 
 import lolSchedule from "./lolSchedule.json";
 
-import { GeneralCommand } from "../../types";
-import { colors } from "../../variables";
 
 type days = keyof typeof lolSchedule.LCK;
 

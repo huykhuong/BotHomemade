@@ -1,25 +1,25 @@
+import {
+  BotHomemadeGeneralState,
+  BotHomemadeMusicStateManager,
+} from "@StateManager";
 import { AudioPlayerStatus } from "@discordjs/voice";
+import { MusicCommand, Song } from "@types";
+import {
+  getQuery,
+  sendMessageMusicToChannel,
+  sendMessageToChannel,
+} from "@utilities/commands";
+import {
+  generateAudioStream,
+  playSong,
+} from "@utilities/commands/musicCommands";
+import { generateAutoplayTrack } from "@utilities/spotify/autoplay";
+import { getRequesterName } from "@utilities/users";
 import { Message } from "discord.js";
 import { isEmpty } from "lodash/fp";
 import ytdl from "ytdl-core";
 import ytsr, { Video } from "ytsr";
 
-import {
-  BotHomemadeGeneralState,
-  BotHomemadeMusicStateManager,
-} from "../../StateManager";
-import { MusicCommand, Song } from "../../types";
-import {
-  getQuery,
-  sendMessageMusicToChannel,
-  sendMessageToChannel,
-} from "../../utilities/commands";
-import {
-  generateAudioStream,
-  playSong,
-} from "../../utilities/commands/musicCommands";
-import { generateAutoplayTrack } from "../../utilities/spotify/autoplay";
-import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, createVoiceConnection } from "../utils";
 

@@ -1,9 +1,9 @@
+import { BotHomemadeGeneralState } from "@StateManager";
+import { MusicCommand } from "@types";
+import { sendMessageToChannel } from "@utilities/commands";
+import { getRequesterName } from "@utilities/users";
 import { Message } from "discord.js";
 
-import { BotHomemadeGeneralState } from "../../StateManager";
-import { MusicCommand } from "../../types";
-import { sendMessageToChannel } from "../../utilities/commands";
-import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
