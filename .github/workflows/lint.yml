@@ -15,7 +15,7 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run eslint
-        uses: npm run lint
+        run: npm run lint
 # name: GitHub Actions Demo
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 # on: ["pull_request"]
