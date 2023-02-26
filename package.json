@@ -11,6 +11,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.14.0",
     "discord-player": "^5.4.0",
