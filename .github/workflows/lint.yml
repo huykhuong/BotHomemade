@@ -1,22 +1,18 @@
 name: JavaScript/TypeScript
 concurrency:
+  group: js-${{ github.head_ref || 'main' }}
   cancel-in-progress: true
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches-ignore:
-      - staging
-      - production
+on: ["pull_request"]
 
 jobs:
-  eslint:
-    name: eslint
+  verify:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Install modules
         run: npm install
-      - name: eslint
-        uses: npm run lint
+      - name: Run eslint
+        run: npm run lint
