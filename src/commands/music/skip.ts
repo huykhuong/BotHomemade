@@ -8,7 +8,7 @@ import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel } from "../utils";
 
-export const skipCommand: MusicCommand = {
+const skipCommand: MusicCommand = {
   type: "music",
   name: "skip",
   run: async (message) => {
@@ -55,3 +55,5 @@ export const skipCommand: MusicCommand = {
     }
   },
 };
+
+export default skipCommand;

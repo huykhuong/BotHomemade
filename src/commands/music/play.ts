@@ -25,7 +25,7 @@ import { checkInVoiceChannel, createVoiceConnection } from "../utils";
 
 let rootSong = {} as Song;
 
-export const playCommand: MusicCommand = {
+const playCommand: MusicCommand = {
   type: "music",
   name: "play",
   run: async (message: Message) => {
@@ -132,3 +132,5 @@ export const playCommand: MusicCommand = {
     }
   },
 };
+
+export default playCommand;

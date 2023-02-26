@@ -15,7 +15,7 @@ import {
   sendRandomCommandResponse,
 } from "../utils";
 
-export const removeCommand: MusicCommand = {
+const removeCommand: MusicCommand = {
   type: "music",
   name: "remove",
   run: async (message: Message) => {
@@ -113,3 +113,5 @@ export const removeCommand: MusicCommand = {
     );
   },
 };
+
+export default removeCommand;
