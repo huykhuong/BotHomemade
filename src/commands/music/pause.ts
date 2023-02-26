@@ -11,7 +11,7 @@ import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
-export const pauseCommand: MusicCommand = {
+const pauseCommand: MusicCommand = {
   type: "music",
   name: "pause",
   run: async (message: Message) => {
@@ -44,3 +44,5 @@ export const pauseCommand: MusicCommand = {
     message.channel.send("Bitch, I'm paused already");
   },
 };
+
+export default pauseCommand;

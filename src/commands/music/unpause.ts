@@ -11,7 +11,7 @@ import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
-export const unpauseCommand: MusicCommand = {
+const unpauseCommand: MusicCommand = {
   type: "music",
   name: "unpause",
   run: async (message: Message) => {
@@ -43,3 +43,5 @@ export const unpauseCommand: MusicCommand = {
     message.channel.send("Bitch, I'm unpaused already");
   },
 };
+
+export default unpauseCommand;

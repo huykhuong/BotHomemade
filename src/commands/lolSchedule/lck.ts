@@ -7,7 +7,7 @@ import { colors } from "../../variables";
 
 type days = keyof typeof lolSchedule.LCK;
 
-export const lckCommand: GeneralCommand = {
+const lckCommand: GeneralCommand = {
   type: "general",
   name: "lck",
   run: async (message: Message) => {
@@ -76,6 +76,8 @@ export const lckCommand: GeneralCommand = {
     });
   },
 };
+
+export default lckCommand;
 
 const getMatchStatus = (timeOfMatch: number, timeNowToday: number): string => {
   if (

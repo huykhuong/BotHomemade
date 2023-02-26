@@ -7,7 +7,7 @@ import { getRequesterName } from "../../utilities/users";
 import responseSamples from "../randomResponseCollection.json";
 import { checkInVoiceChannel, sendRandomCommandResponse } from "../utils";
 
-export const stopCommand: MusicCommand = {
+const stopCommand: MusicCommand = {
   type: "music",
   name: "stop",
   run: async (message: Message) => {
@@ -33,3 +33,5 @@ export const stopCommand: MusicCommand = {
     }
   },
 };
+
+export default stopCommand;

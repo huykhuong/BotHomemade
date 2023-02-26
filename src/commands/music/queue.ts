@@ -5,7 +5,7 @@ import { MusicCommand } from "../../types";
 import { sendMessageToChannel } from "../../utilities/commands";
 import { colors } from "../../variables";
 
-export const queueCommand: MusicCommand = {
+const queueCommand: MusicCommand = {
   type: "music",
   name: "queue",
   run: async (message: Message) => {
@@ -41,3 +41,5 @@ export const queueCommand: MusicCommand = {
     }
   },
 };
+
+export default queueCommand;
