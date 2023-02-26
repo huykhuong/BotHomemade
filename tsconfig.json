@@ -4,6 +4,7 @@
     "module": "CommonJS",
     "baseUrl": "src/",
     "rootDir": "src",
+    "skipLibCheck": true,
     "strict": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
