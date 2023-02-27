@@ -14,7 +14,7 @@ export const authenticateAccessToken = () => {
     .then((data) => {
       BotHomemadeMusicStateManager.spotify.accessToken = data.access_token;
       BotHomemadeMusicStateManager.spotify.expireTimestamp = currentTime
-        .setSeconds(currentTime.getSeconds() + 3600)
+        .setTime(currentTime.getTime() + 60 * 60 * 1000)
         .toString();
 
       return data.access_token;

@@ -11,18 +11,23 @@ export const searchAndGetSpotifySong = async (
   message: Message,
   author: string | undefined
 ) => {
-  const {
-    spotify: { accessToken, expireTimestamp },
-  } = BotHomemadeMusicStateManager;
+  BotHomemadeMusicStateManager;
 
   // Check to see if access token has expired
-  if (!accessToken || Date.now() > Date.parse(expireTimestamp)) {
+  if (
+    !BotHomemadeMusicStateManager.spotify.accessToken ||
+    Date.now() > Number(BotHomemadeMusicStateManager.spotify.expireTimestamp)
+  ) {
     const newlyRequestedAccessToken = await authenticateAccessToken();
 
     return buildSongObject(message, author, newlyRequestedAccessToken);
   }
 
-  return buildSongObject(message, author, accessToken);
+  return buildSongObject(
+    message,
+    author,
+    BotHomemadeMusicStateManager.spotify.accessToken
+  );
 };
 
 async function buildSongObject(
