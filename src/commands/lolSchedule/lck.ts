@@ -1,9 +1,9 @@
 import { GeneralCommand } from "@types";
+import { sendMessageToChannel } from "@utilities/commands";
 import { colors } from "@variables";
 import { Message } from "discord.js";
 
 import lolSchedule from "./lolSchedule.json";
-
 
 type days = keyof typeof lolSchedule.LCK;
 
@@ -18,6 +18,11 @@ const lckCommand: GeneralCommand = {
     const day = today.getDate().toString().padStart(2, "0");
 
     const monthAndDay = `${month}-${day}` as days;
+
+    if (!lolSchedule.LCK[monthAndDay]) {
+      sendMessageToChannel(message, "We don't have LCK today", "");
+      return;
+    }
 
     const { match: match1, time: time1 } = lolSchedule.LCK[monthAndDay]["1"];
     const { match: match2, time: time2 } = lolSchedule.LCK[monthAndDay]["2"];
