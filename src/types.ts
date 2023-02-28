@@ -12,7 +12,8 @@ export type AvailableCommands =
   | "unpause"
   | "autoplay"
   | "stop"
-  | "lck";
+  | "lck"
+  | "lpl";
 
 type CommandTypes = "general" | "music";
 
