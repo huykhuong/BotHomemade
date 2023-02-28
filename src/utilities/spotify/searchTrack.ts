@@ -11,8 +11,6 @@ export const searchAndGetSpotifySong = async (
   message: Message,
   author: string | undefined
 ) => {
-  BotHomemadeMusicStateManager;
-
   // Check to see if access token has expired
   if (
     !BotHomemadeMusicStateManager.spotify.accessToken ||

@@ -7,13 +7,13 @@ import {
 import { colors } from "@variables";
 import { Message } from "discord.js";
 
-import lolSchedule from "./lckSchedule.json";
+import lolSchedule from "./lplSchedule.json";
 
 type days = keyof typeof lolSchedule;
 
-const lckCommand: GeneralCommand = {
+export const lplCommand: GeneralCommand = {
   type: "general",
-  name: "lck",
+  name: "lpl",
   run: async (message: Message) => {
     const today = new Date();
     const todayUTCTimestamp = new Date(today.toUTCString()).getTime();
@@ -24,7 +24,7 @@ const lckCommand: GeneralCommand = {
     const monthAndDay = `${month}-${day}` as days;
 
     if (!lolSchedule[monthAndDay]) {
-      sendMessageToChannel(message, "We don't have LCK today", "");
+      sendMessageToChannel(message, "We don't have LPL today", "");
       return;
     }
 
@@ -43,12 +43,17 @@ const lckCommand: GeneralCommand = {
     message.channel.send({
       embeds: [
         {
-          title: `LCK Schedule ${monthAndDay}`,
+          title: `LPL Schedule ${monthAndDay}`,
           description: `1. ${insertVSWord(match1)} · ${getMatchStatus(
             timeOfMatch1,
             todayUTCTimestamp
           )}  \n\n 2. ${insertVSWord(match2)} · ${getMatchStatus(
             timeOfMatch2,
+            todayUTCTimestamp
+          )} ${renderThirdMatch(
+            //@ts-ignore
+            lolSchedule[monthAndDay]["3"],
+            monthAndDay,
             todayUTCTimestamp
           )}`,
           color: colors.embedColor,
@@ -60,8 +65,8 @@ const lckCommand: GeneralCommand = {
           components: [
             {
               style: 5,
-              label: `Watch now on LCK Tieng Viet`,
-              url: `https://www.youtube.com/@LCKTiengViet`,
+              label: `Watch now on LPL Youtube`,
+              url: `https://www.youtube.com/@LPLOfficial`,
               disabled: false,
               type: 2,
             },
@@ -74,8 +79,8 @@ const lckCommand: GeneralCommand = {
             },
             {
               style: 5,
-              label: `Watch now on LCK Global Youtube`,
-              url: `https://www.youtube.com/@LCKglobal`,
+              label: `Watch now on LPL Twitch`,
+              url: `https://www.twitch.tv/lpl`,
               disabled: false,
               type: 2,
             },
@@ -86,4 +91,23 @@ const lckCommand: GeneralCommand = {
   },
 };
 
-export default lckCommand;
+const renderThirdMatch = (
+  thirdMatch: { match: string; time: string } | undefined,
+  monthAndDay: string | days,
+  todayUTCTimestamp: number
+): string => {
+  if (!thirdMatch) return "";
+
+  const match3Data = thirdMatch;
+  const { match, time } = match3Data;
+
+  const date = new Date("2023-".concat(`${monthAndDay} ${time}`));
+
+  // Time of match
+  const timeOfMatch = new Date(date.toUTCString()).getTime();
+
+  return `\n\n 3. ${insertVSWord(match)} · ${getMatchStatus(
+    timeOfMatch,
+    todayUTCTimestamp
+  )}`;
+};

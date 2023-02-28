@@ -1,6 +1,6 @@
-
 import { joinCommand } from "@commands/join";
 import lckCommand from "@commands/lolSchedule/lck";
+import { lplCommand } from "@commands/lolSchedule/lpl";
 import autoplayCommand from "@commands/music/autoplay";
 import pauseCommand from "@commands/music/pause";
 import playCommand from "@commands/music/play";
@@ -50,6 +50,8 @@ export const getCommand = (commandName: AvailableCommands): Command | null => {
       return stopCommand;
     case "lck":
       return lckCommand;
+    case "lpl":
+      return lplCommand;
     default:
       return null;
   }
