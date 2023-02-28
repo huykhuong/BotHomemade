@@ -1,11 +1,15 @@
 import { GeneralCommand } from "@types";
 import { sendMessageToChannel } from "@utilities/commands";
+import {
+  getMatchStatus,
+  insertVSWord,
+} from "@utilities/commands/lolScheduleCommands";
 import { colors } from "@variables";
 import { Message } from "discord.js";
 
-import lolSchedule from "./lolSchedule.json";
+import lolSchedule from "./lckSchedule.json";
 
-type days = keyof typeof lolSchedule.LCK;
+type days = keyof typeof lolSchedule;
 
 const lckCommand: GeneralCommand = {
   type: "general",
@@ -19,13 +23,13 @@ const lckCommand: GeneralCommand = {
 
     const monthAndDay = `${month}-${day}` as days;
 
-    if (!lolSchedule.LCK[monthAndDay]) {
+    if (!lolSchedule[monthAndDay]) {
       sendMessageToChannel(message, "We don't have LCK today", "");
       return;
     }
 
-    const { match: match1, time: time1 } = lolSchedule.LCK[monthAndDay]["1"];
-    const { match: match2, time: time2 } = lolSchedule.LCK[monthAndDay]["2"];
+    const { match: match1, time: time1 } = lolSchedule[monthAndDay]["1"];
+    const { match: match2, time: time2 } = lolSchedule[monthAndDay]["2"];
 
     // Date of match
     const dateOfMatch1 = new Date("2023-".concat(`${monthAndDay} ${time1}`));
@@ -83,45 +87,3 @@ const lckCommand: GeneralCommand = {
 };
 
 export default lckCommand;
-
-const getMatchStatus = (timeOfMatch: number, timeNowToday: number): string => {
-  if (
-    (Math.ceil((timeOfMatch - timeNowToday) / 1000 / 60) >= -150 &&
-      Math.ceil((timeOfMatch - timeNowToday) / 1000 / 60) < 0) ||
-    Math.ceil((timeOfMatch - timeNowToday) / 1000 / 60) === 0
-  ) {
-    return "Live now 🔴";
-  } else if (Math.ceil((timeOfMatch - timeNowToday) / 1000 / 60) < -150) {
-    return "Match concluded";
-  }
-
-  return `Live in ${formatTime(timeOfMatch - timeNowToday)}`;
-};
-
-const insertVSWord = (matchName: string): string => {
-  const match = matchName.split(" ");
-
-  match.splice(1, 0, "vs");
-
-  return match.join(" ");
-};
-
-const formatTime = (miliseconds: number): string => {
-  const minutes = miliseconds / 1000 / 60;
-
-  const hours = minutes / 60;
-
-  const roundedDownHours = Math.floor(hours);
-
-  const leftoverMinutes = Math.round((hours - roundedDownHours) * 60);
-
-  if (roundedDownHours <= 1 && leftoverMinutes <= 1) {
-    return `${roundedDownHours} hour and ${leftoverMinutes} minute`;
-  } else if (roundedDownHours <= 1 && leftoverMinutes > 1) {
-    return `${roundedDownHours} hour and ${leftoverMinutes} minutes`;
-  } else if (roundedDownHours > 1 && leftoverMinutes <= 1) {
-    return `${roundedDownHours} hours and ${leftoverMinutes} minute`;
-  }
-
-  return `${roundedDownHours} hours and ${leftoverMinutes} minutes`;
-};
