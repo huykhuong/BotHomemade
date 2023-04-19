@@ -16,7 +16,7 @@
     "@actions/github": "^5.1.1",
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.14.0",
-    "discord-player": "^5.4.0",
+    "discord-player": "^6.2.1",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "ffmpeg-static": "^5.1.0",
